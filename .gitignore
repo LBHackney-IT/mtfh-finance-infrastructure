@@ -1,0 +1,5 @@
+# Ignore terraform state folder
+/staging/.terraform
+/production/.terraform
+/staging/.terraform.lock.hcl
+/production/.terraform.lock.hcl
