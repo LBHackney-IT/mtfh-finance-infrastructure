@@ -67,6 +67,6 @@ resource "aws_security_group" "mtfh_finance_security_group" {
   }
 
   tags = {
-    Name = "allow_db_traffic"
+    Name = "mtfh_finance_allow_db_traffic"
   }
 }
