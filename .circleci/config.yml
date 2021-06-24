@@ -44,14 +44,14 @@ commands:
       - checkout
       - run:
           command: |
-            cd ./terraform/<<parameters.environment>>/
+            cd ./<<parameters.environment>>/
             terraform get -update=true
             terraform init
           name: get and init
       - run:
           name: apply
           command: |
-            cd ./terraform/<<parameters.environment>>/
+            cd ./<<parameters.environment>>/
             terraform apply -auto-approve
 
 jobs:
