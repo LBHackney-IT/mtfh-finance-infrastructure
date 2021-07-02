@@ -30,8 +30,8 @@ data "aws_ssm_parameter" "housing_finance_mysql_password" {
 }
 
 resource "aws_security_group" "mtfh_finance_security_group" {
-  name        = "mtfh-finance-allowdb-traffic-${var.environment_name}"
-  description = "Allow traffic for the various database types"
+  name        = "mtfh-finance-allow-traffic-${var.environment_name}"
+  description = "Allow traffic for the various databases and applications"
   vpc_id      = "vpc-0ce853ddb64e8fb3c"
 
   ingress {
@@ -54,6 +54,30 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     description      = "Allow Redis"
     from_port        = 6379
     to_port          = 6379
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description      = "Allow http traffic"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "http"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+    ingress {
+    description      = "Allow traffic for income api"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+    ingress {
+    description      = "Allow traffic for manage arrears front end"
+    from_port        = 3001
+    to_port          = 3001
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
