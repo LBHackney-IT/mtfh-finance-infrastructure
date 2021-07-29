@@ -1,11 +1,4 @@
 # Postg Database Setup
-resource "aws_db_subnet_group" "db_subnets" {
-  name       = "housing-finance-db-subnet-${var.environment_name}"
-  subnet_ids = ["subnet-05ce390ba88c42bfd","subnet-0140d06fb84fdb547"]
-  lifecycle {
-    create_before_destroy = true
-  }
-}
 
 module "postgres_db_development" {
   source = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/database/postgres"
