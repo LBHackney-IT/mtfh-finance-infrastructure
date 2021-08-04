@@ -19,6 +19,19 @@ terraform {
   }
 }
 
+data "aws_ssm_parameter" "housing_finance_postgres_database" {
+  name = "/housing-finance/staging/postgres-database"
+}
+data "aws_ssm_parameter" "housing_finance_postgres_port" {
+  name = "/housing-finance/staging/postgres-port"
+}
+data "aws_ssm_parameter" "housing_finance_postgres_username" {
+  name = "/housing-finance/staging/postgres-username"
+}
+data "aws_ssm_parameter" "housing_finance_postgres_password" {
+  name = "/housing-finance/staging/postgres-password"
+}
+
 data "aws_ssm_parameter" "housing_finance_mysql_database" {
   name = "/housing-finance/staging/mysql-database"
 }
