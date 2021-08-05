@@ -43,8 +43,8 @@ data "aws_ssm_parameter" "housing_finance_mysql_password" {
 }
 
 resource "aws_security_group" "mtfh_finance_security_group" {
-  name        = "mtfh-finance-allow-traffic-${var.environment_name}"
-  description = "Allow traffic for the various databases and applications"
+  name        = "mtfh-finance-allowdb-traffic-${var.environment_name}"
+  description = "Allow traffic for the various database types"
   vpc_id      = "vpc-0ce853ddb64e8fb3c"
 
   ingress {
@@ -75,7 +75,7 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     description      = "Allow http traffic"
     from_port        = 80
     to_port          = 80
-    protocol         = "http"
+    protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
