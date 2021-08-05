@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "db_subnets" {
 resource "aws_db_instance" "housing-mysql-db" {
   identifier                  = "housing-finance-db-${var.environment_name}"
   engine                      = "mysql"
-  engine_version              = "8.0.20"
+  engine_version              = "8.0.23"
   instance_class              = "db.t2.micro" //this should be a more production appropriate instance in production
   allocated_storage           = 10
   storage_type                = "gp2" //ssd
