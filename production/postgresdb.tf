@@ -19,4 +19,5 @@ module "postgres_db_production" {
   multi_az = true //only true if production deployment
   publicly_accessible = false
   project_name = "housing finance"
+  tags = { BackupPolicy="Prod"}
 }

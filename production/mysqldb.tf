@@ -38,5 +38,6 @@ resource "aws_db_instance" "housing-mysql-db" {
     Environment       = "${var.environment_name}"
     terraform-managed = true
     project_name      = "MTFH Finance"
+    BackupPolicy      = "Prod"
   }
 }
