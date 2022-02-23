@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "mtfh_print" {
   bucket = "my-tf-test-bucket"
 
   tags = {
-    Name        = "mtfh-print-${var.environment_name}"
+    Name        = "mtfh-finance-printroom-${var.environment_name}"
     Environment = "${var.environment_name}"
   }
 }
