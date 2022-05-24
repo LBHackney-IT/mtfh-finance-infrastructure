@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "sftpbucket" {
 # Create the /cashfiles folder in the S3 bucket
 resource "aws_s3_bucket_object" "s3_folder" {
   depends_on   = [aws_s3_bucket.sftpbucket]
-  bucket       = aws_s3_bucket.sftpbucket.id
+  bucket       = aws_s3_bucket.sftpbucket
   key          = "${var.bucket_folder_name}/"
   content_type = local.s3_content_type
 }
