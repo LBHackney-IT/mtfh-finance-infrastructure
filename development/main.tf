@@ -55,6 +55,6 @@ module "civica_sftp_filesync" {
   environment = var.environment_name
   statemachine_lambda_name = var.statemachine_lambda_name
   statemachine_lambda_role = var.statemachine_lambda_role
-  sftp_user_name = module.civica_sftp_filesync.civica_sftp_username
-  sftp_ssh_public_key = module.civica_sftp_filesync.civica_sftp_public_key
+  sftp_user_name = "civica.ifs" #module.civica_sftp_filesync.civica_sftp_username
+  sftp_ssh_public_key = "xxxxx" #module.civica_sftp_filesync.civica_sftp_public_key
 }
