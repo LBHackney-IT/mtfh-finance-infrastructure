@@ -2,7 +2,7 @@ data "aws_ssm_parameter" "housing_finance_civica_sftp_username" {
   name = "/housing-finance/development/civica-sftp-username"
 }
 
-data "aws_ssm_parameter" "housing_finance_civica_sftp_password" {
+data "aws_ssm_parameter" "housing_finance_civica_sftp_key" {
   name = "/housing-finance/development/civica-sftp-ssh-public-key"
 }
 
@@ -11,7 +11,7 @@ output "civica_sftp_username" {
 }
 
 output "civica_sftp_public_key" {
-  value = data.aws_ssm_parameter.housing_finance_civica_sftp_public_key
+  value = data.aws_ssm_parameter.housing_finance_civica_sftp_key
 }
 
 #=======================================================================
