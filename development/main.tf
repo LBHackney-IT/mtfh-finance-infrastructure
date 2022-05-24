@@ -53,8 +53,9 @@ resource "aws_security_group" "mtfh_finance_security_group" {
 module "civica_sftp_filesync" {
   source = "../civica_sftp_filesync_module"
   environment = var.environment_name
-  statemachine_lambda_name = var.statemachine_lambda_name
-  statemachine_lambda_role = var.statemachine_lambda_role
+  statemachine_lambda_name = "housing-finance-interim-api-development-check-cash-files" #var.statemachine_lambda_name
+  statemachine_lambda_role = "housing-finance-interim-api-development-eu-west-2-lambdaRole" #var.statemachine_lambda_role
   sftp_user_name = "civica.ifs" #module.civica_sftp_filesync.civica_sftp_username
-  sftp_ssh_public_key = "xxxxx" #module.civica_sftp_filesync.civica_sftp_public_key
+  sftp_ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBbItKs2WMU7Z5UCh8kUeY8lzlUwP7CoTc4IlhpWV6v2AgVwPziDz1iywKR5GAkUO0f0GNwl3EQMy9HYzYgr+1/Bk2mAtIqaH4zGgJtVGNEweguB54V6ntFhGPlDs1DWws64vzqTWa7PJpI6RqH16hQDGKYPnMlKHhr4H6+nepd/0+aRsTV44ATbLdaqRbPmHLd3s7sLk6Sriwr++1S9z3S/0SKF8JKQlUfYNWXNz0uea8qB0plj6/Njljgm7cixXL9AfDI0c0Cbk48j9C4wiOC6aP6Eiakmk5+pimzhlmWi4z1ZZhWHHhevhSZTLaiT6QKP+At8frZ94I6waNJozNyodzxdV75lLtWb3uonSkseIhC2qvXZe1I9HA9DeeXJ63+4IxE21EA15kc7jRKD6VufrF9UpSSA/WbYRgkOcwxy+SBsJy6pjvh6msAmTO2n4liWJqu1UF9s0IKYOtY8ph8KlNuJdAEPAxCORLeRCUO82+Hqt5U41fSyZtpMMV0ok=" 
+  #module.civica_sftp_filesync.civica_sftp_public_key
 }

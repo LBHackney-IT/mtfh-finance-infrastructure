@@ -12,9 +12,9 @@ variable "environment" {
 #=======================================================================
 
 locals {
-  sid_1           = "s3-Bucket-Read"
-  sid_2           = "s3-Bucket-Objects-Read"
-  sid_3           = "s3-Bucket-Objects-Write"
+  sid_1           = "s3BucketRead"
+  sid_2           = "s3BucketObjectsRead"
+  sid_3           = "s3BucketObjectsWrite"
   s3_content_type = "application/octet-stream"
 }
 
