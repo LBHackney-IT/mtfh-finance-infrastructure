@@ -1,4 +1,15 @@
 #=======================================================================
+# Locals
+#=======================================================================
+
+locals {
+  sid_1           = "s3BucketRead"
+  sid_2           = "s3BucketObjectsRead"
+  sid_3           = "s3BucketObjectsWrite"
+  s3_content_type = "application/octet-stream"
+}
+
+#=======================================================================
 # Module
 #=======================================================================
 
@@ -10,13 +21,6 @@ variable "environment" {
 #=======================================================================
 # IAM
 #=======================================================================
-
-locals {
-  sid_1           = "s3BucketRead"
-  sid_2           = "s3BucketObjectsRead"
-  sid_3           = "s3BucketObjectsWrite"
-  s3_content_type = "application/octet-stream"
-}
 
 variable "statemachine_lambda_name" {
   description = "The existing Statemachine lambda name"
