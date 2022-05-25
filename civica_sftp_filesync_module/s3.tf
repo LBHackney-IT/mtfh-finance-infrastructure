@@ -33,17 +33,17 @@ data "aws_lambda_function" "existingCashfileLambda" {
 }
 
 # 2) Add a bucket lambda trigger for the PUT event
-resource "aws_s3_bucket_notification" "aws-lambda-trigger" {
+resource "aws_s3_bucket_notification" "lambda_trigger" {
   bucket = aws_s3_bucket.sftpbucket.id
   lambda_function {
     lambda_function_arn = data.aws_lambda_function.existingCashfileLambda.arn
     events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = "${var.bucket_folder_name}/"
-    filter_suffix       = ".dat"
+    # filter_prefix       = "${var.bucket_folder_name}/"
+    # filter_suffix       = ".dat"
   }
 }
 
-resource "aws_lambda_permission" "test" {
+resource "aws_lambda_permission" "lambda_trigger_perms" {
   statement_id  = "AllowS3Invoke"
   action        = "lambda:InvokeFunction"
   function_name = data.aws_lambda_function.existingCashfileLambda.function_name
