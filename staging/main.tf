@@ -107,3 +107,10 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     Name = "mtfh_finance_allow_db_traffic"
   }
 }
+
+module "civica_sftp_filesync" {
+  source = "../civica_sftp_filesync_module"
+  environment = var.environment_name
+  statemachine_lambda_name = var.statemachine_lambda_name
+  statemachine_lambda_role = var.statemachine_lambda_role
+}
