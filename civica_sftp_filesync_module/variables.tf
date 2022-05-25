@@ -15,7 +15,7 @@ locals {
 
 variable "environment" {
   description = "Provide Environment name"
-  #default     = "dev" # dev/staging/prod
+  type = string
 }
 
 #=======================================================================
@@ -24,10 +24,12 @@ variable "environment" {
 
 variable "statemachine_lambda_name" {
   description = "The existing Statemachine lambda name"
+  type = string
 }
 
 variable "statemachine_lambda_role" {
   description = "The IAM role of the existing Lambda function - to access the S3 bucket and read the Civica cashfile"
+  type = string
 }
 
 #=======================================================================
@@ -37,21 +39,25 @@ variable "statemachine_lambda_role" {
 variable "bucketName" {
   description = "provide bucket name"
   default     = "civica-sftp-cashfile-bucket"
+  type        = string
 }
 
-variable "civica-sftp-fileSync-role" {
+variable "civica_sftp_fileSync_role" {
   description = "Civica SFTP File Sync role name"
-  default     = "civica-sftp-fileSync-role"
+  default     = "Civica_sftp_fileSync_role"
+  type        = string
 }
 
-variable "civica-sftp-s3-access-policy" {
+variable "civica_sftp_s3_access_policy" {
   description = "S3 SFTP access policy"
-  default     = "civica-sftp-s3-access-policy"
+  default     = "Civica_sftp_s3_access_policy"
+  type        = string
 }
 
 variable "bucket_folder_name" {
   description = "default bucket folder name"
   default     = "cashfiles"
+  type        = string
 }
 
 #=======================================================================
@@ -64,12 +70,3 @@ variable "identity_provider" {
   default     = "SERVICE_MANAGED"
 }
 
-# SFTP username
-variable "sftp_user_name" {
-  description = "Sftp user name"
-}
-
-# SFTP public key
-variable "sftp_ssh_public_key" {
-  description = "SSH public key"
-}

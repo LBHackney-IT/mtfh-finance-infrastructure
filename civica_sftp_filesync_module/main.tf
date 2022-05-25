@@ -1,30 +1,14 @@
-# data "aws_ssm_parameter" "housing_finance_civica_sftp_username" {
-#   name = "/housing-finance/development/civica-sftp-username"
-# }
-
-# data "aws_ssm_parameter" "housing_finance_civica_sftp_key" {
-#   name = "/housing-finance/development/civica-sftp-ssh-public-key"
-# }
-
-# output "civica_sftp_username" {
-#   value = data.aws_ssm_parameter.housing_finance_civica_sftp_username
-# }
-
-# output "civica_sftp_public_key" {
-#   value = data.aws_ssm_parameter.housing_finance_civica_sftp_key
-# }
-
 #=======================================================================
 # IAM configuration
 #=======================================================================
 resource "aws_iam_role" "fileSync_role" {
-  name               = var.civica-sftp-fileSync-role
+  name               = var.civica_sftp_fileSync_role
   description        = "Civica cashfile sync IAM Role"
   assume_role_policy = file("${path.module}/assumerolepolicy.json")
 }
 
 resource "aws_iam_policy" "s3_access_policy" {
-  name        = var.civica-sftp-s3-access-policy
+  name        = var.civica_sftp_s3_access_policy
   description = "Civica cashfile sync IAM policy"
   policy      = data.template_file.iam_policy_template.rendered
 }
