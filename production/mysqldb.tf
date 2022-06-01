@@ -41,3 +41,32 @@ resource "aws_db_instance" "housing-mysql-db" {
     BackupPolicy      = "Prod"
   }
 }
+
+resource "aws_db_instance" "housing-mysql-db-replica" {
+  identifier                  = "housing-finance-db-${var.environment_name}-replica"
+  replicate_source_db         = aws_db_instance.housing-mysql-db.id
+  instance_class              = "db.t3.medium"
+  allocated_storage           = 50
+  storage_type                = "gp2"
+  port                        = 3306
+  backup_window               = "00:01-00:31"
+  vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
+  monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
+  backup_retention_period     = 30
+  storage_encrypted           = true
+  deletion_protection         = true
+  multi_az                    = false
+  auto_minor_version_upgrade  = true
+  allow_major_version_upgrade = false
+
+  apply_immediately   = false
+  skip_final_snapshot = true
+  publicly_accessible = false
+
+  tags = {
+    Name              = "housing-finance-db-${var.environment_name}-replica"
+    Environment       = "${var.environment_name}"
+    terraform-managed = true
+    project_name      = "MTFH Finance"
+  }
+}
