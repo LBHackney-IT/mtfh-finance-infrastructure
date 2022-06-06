@@ -18,10 +18,6 @@ variable "environment" {
   type = string
 }
 
-#=======================================================================
-# IAM
-#=======================================================================
-
 variable "statemachine_lambda_name" {
   description = "The existing Statemachine lambda name"
   type = string
@@ -32,15 +28,14 @@ variable "statemachine_lambda_role" {
   type = string
 }
 
-#=======================================================================
-# S3
-#=======================================================================
-
-variable "bucketName" {
-  description = "provide bucket name"
-  default     = "civica-sftp-cashfile-bucket"
-  type        = string
+variable "remote_lambda_role_arn" {
+  description = "This is the ARN of the role of the remote Lambda function which will access the S3"
+  type = string
 }
+
+#=======================================================================
+# IAM
+#=======================================================================
 
 variable "civica_sftp_fileSync_role" {
   description = "Civica SFTP File Sync role name"
@@ -51,6 +46,16 @@ variable "civica_sftp_fileSync_role" {
 variable "civica_sftp_s3_access_policy" {
   description = "S3 SFTP access policy"
   default     = "Civica_sftp_s3_access_policy"
+  type        = string
+}
+
+#=======================================================================
+# S3
+#=======================================================================
+
+variable "bucketName" {
+  description = "provide bucket name"
+  default     = "civica-sftp-cashfile-bucket"
   type        = string
 }
 

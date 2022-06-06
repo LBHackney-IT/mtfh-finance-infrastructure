@@ -6,24 +6,30 @@ This module creates the following infrastructural resources:
 	 - Lifecycle policy to expire objects older than 30 days
  - SFTP server endpoint for the S3 
 	 - User with SSH access (note that the username and public key are stored in Parameter store)
- - IAM Role and attached Permission Policy
+ - IAM Role and attached Permission Policy - S3 Bucket
 	 - Write to the S3 bucket - for the SFTP client
 	 - Read (GetObject) - for the Cashfile Lambda function
+ - IAM Policy for CivicaPay Lambda's IAM Role
+	 - Grants Execution permissions (applied to Finance AWS account)
+	 - Provides AssumeRole permission 
  - Lambda Trigger event to respond to PUT events on the S3 bucket
 
 ## Apply the module
 Use the following block to invoke the module (in main.tf):
 
-    module "civica_sftp_filesync" {
-	    source = "./civica_sftp_filesync_module"
-	    environment = var.environment_name
-	    statemachine_lambda_name = var.statemachine_lambda_name
-	    statemachine_lambda_role = var.statemachine_lambda_role
+    module "civicapay_cashfile_sync" {
+	    source						= "./civica_sftp_filesync_module"
+	    environment					= var.environment_name
+		remote_lambda_role_arn		= var.remote_lambda_role_arn
+	    statemachine_lambda_name	= var.statemachine_lambda_name
+	    statemachine_lambda_role	= var.statemachine_lambda_role
     }
 
 **source** = relative path to the module
 
-**environment** = development/staging/production
+**environment** = development | staging | production
+
+**remote_lambda_role_arn** = This is the ARN of the role of the CivicaPay Lambda function which will access the S3
 
 **statemachine_lambda_name** = the name of the HFCashFileStateMachine lambda
 
