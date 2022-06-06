@@ -18,11 +18,11 @@ This module creates the following infrastructural resources:
 Use the following block to invoke the module (in main.tf):
 
     module "civicapay_cashfile_sync" {
-	    source 						= "./civica_sftp_filesync_module"
-	    environment 				= var.environment_name
-		remote_lambda_role_arn    	= var.remote_lambda_role_arn
-	    statemachine_lambda_name 	= var.statemachine_lambda_name
-	    statemachine_lambda_role 	= var.statemachine_lambda_role
+	    source						= "./civica_sftp_filesync_module"
+	    environment					= var.environment_name
+		remote_lambda_role_arn		= var.remote_lambda_role_arn
+	    statemachine_lambda_name	= var.statemachine_lambda_name
+	    statemachine_lambda_role	= var.statemachine_lambda_role
     }
 
 **source** = relative path to the module

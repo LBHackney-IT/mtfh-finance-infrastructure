@@ -4,7 +4,7 @@
 
 # Assign variables to the policy template
 data "template_file" "iam_remote_role_policy_template" {
-  template = file("${path.module}/Policy-termplate-IAM-Role.tpl")
+  template = file("${path.module}/Policy-template-IAM-Role.tpl")
   vars = {
     "remote-trusted-role-arn" = var.remote_lambda_role_arn
   }
@@ -22,7 +22,7 @@ resource "aws_iam_role" "fileSync_role" {
 
 # Assign variables to the policy template
 data "template_file" "iam_policy_template" {
-  template = file("${path.module}/Policy-termplate-Civica-FileSync-S3-Bucket.tpl")
+  template = file("${path.module}/Policy-template-Civica-FileSync-S3-Bucket.tpl")
   vars = {
     "sid-1"           = local.sid_1
     "sid-2"           = local.sid_2
