@@ -41,6 +41,12 @@ data "aws_ssm_parameter" "housing_finance_mysql_username" {
 data "aws_ssm_parameter" "housing_finance_mysql_password" {
   name = "/housing-finance/production/mysql-password"
 }
+data "aws_ssm_parameter" "housing_finance_mssql_username" {
+  name = "/housing-finance/production/mssql-username"
+}
+data "aws_ssm_parameter" "housing_finance_mssql_password" {
+  name = "/housing-finance/production/mssql-password"
+}
 
 resource "aws_security_group" "mtfh_finance_security_group" {
   name        = "mtfh-finance-allowdb-traffic-${var.environment_name}"
@@ -94,6 +100,7 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
+
 
   egress {
     from_port        = 0
