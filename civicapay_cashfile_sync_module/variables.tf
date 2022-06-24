@@ -37,12 +37,6 @@ variable "remote_lambda_role_arn" {
 # IAM
 #=======================================================================
 
-variable "civica_sftp_fileSync_role" {
-  description = "Civica SFTP File Sync role name"
-  default     = "Civica_sftp_fileSync_role"
-  type        = string
-}
-
 variable "civica_sftp_s3_access_policy" {
   description = "S3 SFTP access policy"
   default     = "Civica_sftp_s3_access_policy"

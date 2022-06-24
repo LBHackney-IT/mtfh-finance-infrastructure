@@ -32,13 +32,14 @@ data "template_file" "iam_policy_template" {
   }
 }
 
+// Policy resource of the S3 Bucket
 resource "aws_iam_policy" "local_lambda_s3_access_policy" {
   name        = var.civica_sftp_s3_access_policy
   description = "Civica cashfile sync IAM policy"
   policy      = data.template_file.iam_policy_template.rendered
 }
 
-# Attach the policy to the roles = the Statemachine Lambda
+# Attach the S3 access policy to the Lambda role
 resource "aws_iam_policy_attachment" "civica_sftp_attach" {
   name = "civica_sftp_attach"
   roles = [
