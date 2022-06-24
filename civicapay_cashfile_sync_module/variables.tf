@@ -65,13 +65,4 @@ variable "bucket_folder_name" {
   type        = string
 }
 
-#=======================================================================
-# SFTP
-#=======================================================================
-
-# default identity provider
-variable "identity_provider" {
-  description = "default identity provider type"
-  default     = "SERVICE_MANAGED"
-}
 
