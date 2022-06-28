@@ -45,6 +45,7 @@ resource "aws_db_instance" "mssql-replica" {
   db_subnet_group_name      = aws_db_subnet_group.mssql_db_subnets.name
   multi_az                  = false
   publicly_accessible       = false
+  #backup_retention_period  = 2
   storage_encrypted         = true
 
   apply_immediately = "true"
