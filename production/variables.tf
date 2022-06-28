@@ -12,11 +12,11 @@ variable "remote_lambda_role_arn" {
 variable "statemachine_lambda_name" {
   description = "The name of the Cashfile Lambda"
   type    = string
-  default = "housing-finance-interim-api-production-cash-file"
+  default = "housing-finance-interim-api-production-check-cash-files"
 }
 
 variable "statemachine_lambda_role" {
   description = "The IAM role of the Cashfile Lambda"
   type    = string
-  default = "housing-finance-interim-api-lambdaExecutionRole"
+  default = "housing-finance-interim-api-production-eu-west-2-lambdaRole"
 }

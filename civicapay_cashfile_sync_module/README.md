@@ -36,7 +36,7 @@ Use the following block to invoke the module (in main.tf):
 |--|--|
 |  develop| housing-finance-interim-api-development-check-cash-files|
 |  staging| housing-finance-interim-api-staging-cash-file-trans|
-|  production| housing-finance-interim-api-production-cash-file|
+|  production| housing-finance-interim-api-production-check-cash-files|
 
 
 **statemachine_lambda_role** = the name of the IAM role of the above lambda function
@@ -45,6 +45,6 @@ Use the following block to invoke the module (in main.tf):
 |--|--|
 | develop | housing-finance-interim-api-development-eu-west-2-lambdaRole |
 | staging | housing-finance-interim-api-lambdaExecutionRole |
-| production | housing-finance-interim-api-lambdaExecutionRole |
+| production | housing-finance-interim-api-production-eu-west-2-lambdaRole |
 
 ## Notes
