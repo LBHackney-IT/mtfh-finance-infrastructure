@@ -31,6 +31,15 @@ data "aws_ssm_parameter" "housing_finance_postgres_username" {
 data "aws_ssm_parameter" "housing_finance_postgres_password" {
   name = "/housing-finance/development/postgres-password"
 }
+data "aws_ssm_parameter" "housing_finance_mssql_database" {
+  name = "/housing-finance/development/mssql-database"
+}
+data "aws_ssm_parameter" "housing_finance_mssql_username" {
+  name = "/housing-finance/development/mssql-username"
+}
+data "aws_ssm_parameter" "housing_finance_mssql_password" {
+  name = "/housing-finance/development/mssql-password"
+}
 
 resource "aws_security_group" "mtfh_finance_security_group" {
   name        = "mtfh-finance-allow-traffic-${var.environment_name}"
