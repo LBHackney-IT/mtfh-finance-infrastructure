@@ -46,7 +46,6 @@ resource "aws_db_instance" "mssql-replica" {
   multi_az                  = false
   publicly_accessible       = false
   storage_encrypted         = true
-  backup_retention_period   = 2
 
   apply_immediately = "true"
 
