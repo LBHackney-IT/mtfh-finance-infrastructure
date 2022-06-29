@@ -41,7 +41,7 @@ resource "aws_db_instance" "mssql-replica" {
   identifier              = "housing-finance-sql-db-${var.environment_name}-replica"
   replicate_source_db     = aws_db_instance.mssql.id
   vpc_security_group_ids  = [aws_security_group.mtfh_finance_security_group.id]
-  db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
+  #db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
   multi_az                = false
   publicly_accessible     = false
   #backup_retention_period = 2
