@@ -32,27 +32,27 @@ resource "aws_db_instance" "mssql" {
   }
 }
 
-resource "aws_db_instance" "mssql-replica" {
-  allocated_storage       = 30
-  #engine                  = "sqlserver-ee"
-  #engine_version          = "15.00.4198.2.v1"
-  instance_class          = "db.t3.xlarge"
-  license_model           = "license-included"
-  identifier              = "housing-finance-sql-db-${var.environment_name}-replica"
-  replicate_source_db     = aws_db_instance.mssql.id
-  vpc_security_group_ids  = [aws_security_group.mtfh_finance_security_group.id]
-  #db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
-  multi_az                = false
-  publicly_accessible     = false
-  #backup_retention_period = 2
-  storage_encrypted       = true
+# resource "aws_db_instance" "mssql-replica" {
+#   allocated_storage       = 30
+#   #engine                  = "sqlserver-ee"
+#   #engine_version          = "15.00.4198.2.v1"
+#   instance_class          = "db.t3.xlarge"
+#   license_model           = "license-included"
+#   identifier              = "housing-finance-sql-db-${var.environment_name}-replica"
+#   replicate_source_db     = aws_db_instance.mssql.id
+#   vpc_security_group_ids  = [aws_security_group.mtfh_finance_security_group.id]
+#   #db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
+#   multi_az                = false
+#   publicly_accessible     = false
+#   #backup_retention_period = 2
+#   storage_encrypted       = true
 
-  apply_immediately = "true"
+#   apply_immediately = "true"
 
-  tags = {
-    Name              = "housing-finance-db-${var.environment_name}"
-    Environment       = "${var.environment_name}"
-    terraform-managed = true
-    project_name      = "MTFH Finance"
-  }
-}
+#   tags = {
+#     Name              = "housing-finance-db-${var.environment_name}"
+#     Environment       = "${var.environment_name}"
+#     terraform-managed = true
+#     project_name      = "MTFH Finance"
+#   }
+# }
