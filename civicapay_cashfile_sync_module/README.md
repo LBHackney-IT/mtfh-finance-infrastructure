@@ -4,25 +4,24 @@ This module creates the following infrastructural resources:
  - S3 Bucket
 	 - contains a folder named cashfiles/
 	 - Lifecycle policy to expire objects older than 30 days
- - SFTP server endpoint for the S3 
-	 - User with SSH access (note that the username and public key are stored in Parameter store)
+ - Local lambda function - reads and processes the cashfile when file is created in the *cashfiles* folder of the S3 bucket
+	 - housing-finance-interim-api-[environment]-check-cash-files
+ - Remote lambda function - writes the cashfile to the S3 bucket
+	 - civica-prod-file-sync-source-lambda
  - IAM Role and attached Permission Policy - S3 Bucket
-	 - Write to the S3 bucket - for the SFTP client
-	 - Read (GetObject) - for the Cashfile Lambda function
- - IAM Policy for CivicaPay Lambda's IAM Role
-	 - Grants Execution permissions (applied to Finance AWS account)
-	 - Provides AssumeRole permission 
- - Lambda Trigger event to respond to PUT events on the S3 bucket
+	 - Write to the S3 bucket - remote Lambda
+	 - Read (GetObject) - for the local lambda function
+ - Lambda Trigger event to respond to the `CreateObject` event on the S3 bucket
 
 ## Apply the module
 Use the following block to invoke the module (in main.tf):
 
     module "civicapay_cashfile_sync" {
-	    source						= "./civica_sftp_filesync_module"
-	    environment					= var.environment_name
-		remote_lambda_role_arn		= var.remote_lambda_role_arn
-	    statemachine_lambda_name	= var.statemachine_lambda_name
-	    statemachine_lambda_role	= var.statemachine_lambda_role
+	    source 						= "./civica_sftp_filesync_module"
+	    environment 				= var.environment_name
+		remote_lambda_role_arn    	= var.remote_lambda_role_arn
+	    statemachine_lambda_name 	= var.statemachine_lambda_name
+	    statemachine_lambda_role 	= var.statemachine_lambda_role
     }
 
 **source** = relative path to the module
@@ -37,7 +36,7 @@ Use the following block to invoke the module (in main.tf):
 |--|--|
 |  develop| housing-finance-interim-api-development-check-cash-files|
 |  staging| housing-finance-interim-api-staging-cash-file-trans|
-|  production| housing-finance-interim-api-production-cash-file|
+|  production| housing-finance-interim-api-production-check-cash-files|
 
 
 **statemachine_lambda_role** = the name of the IAM role of the above lambda function
@@ -46,17 +45,6 @@ Use the following block to invoke the module (in main.tf):
 |--|--|
 | develop | housing-finance-interim-api-development-eu-west-2-lambdaRole |
 | staging | housing-finance-interim-api-lambdaExecutionRole |
-| production | housing-finance-interim-api-lambdaExecutionRole |
+| production | housing-finance-interim-api-production-eu-west-2-lambdaRole |
 
 ## Notes
-
-**SFTP username**
-the username is stored in Parameter Store under the key: 
-
-    /housing-finance/development/civica-sftp-username
-
-**SFTP public key**
-the public key string is stored in Parameter Store under the key:
-
-    /housing-finance/development/civica-sftp-ssh-public-key
-
