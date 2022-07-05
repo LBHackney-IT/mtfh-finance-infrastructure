@@ -3,6 +3,18 @@ variable "environment_name" {
   default = "staging"
 }
 
+variable "mssql-db-source" {
+  description = "The identifier name of the source MS SQL database"
+  type = string
+  default = "housing-finance"
+}
+
+variable "mssql-db-target" {
+  description = "The identifier name of the target MS SQL database"
+  type = string
+  default = "housing-finance-sql-db"
+}
+
 variable "remote_lambda_role_arn" {
   description = "This is the ARN of the role of the Finance Lambda function which will access the S3 to write the Cash file"
   type    = string
