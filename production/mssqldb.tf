@@ -7,53 +7,87 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
   }
 }
 
-resource "aws_db_instance" "mssql" {
-  allocated_storage    = 30
-  engine               = "sqlserver-ee"
-  engine_version       = "15.00.4198.2.v1"
-  instance_class       = "db.t3.xlarge"
-  license_model        = "license-included"
-  identifier           = "housing-finance-sql-db-${var.environment_name}"
-  username             = data.aws_ssm_parameter.housing_finance_mssql_username.value
-  password             = data.aws_ssm_parameter.housing_finance_mssql_password.value
-  vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
-  db_subnet_group_name = aws_db_subnet_group.mssql_db_subnets.name
-  multi_az             = true
-  publicly_accessible  = false
+# identifier for the Source database
+data "aws_db_instance" "source_db" {
+  db_instance_identifier = "${var.mssql-db-source}-${var.environment_name}-web"
+}
+
+# Snapshot1 - create a snapshot of the Source DB
+resource "aws_db_snapshot" "db1_snapshot" {
+  db_instance_identifier = data.aws_db_instance.source_db.id
+  db_snapshot_identifier = "${var.mssql-db-target}-snapshot"
+}
+
+# use Snapshot1 to create a database with EE instance
+resource "aws_db_instance" "mssql-ee" {
+  snapshot_identifier = aws_db_snapshot.db1_snapshot.id
+
+  allocated_storage       = 240
+  engine                  = "sqlserver-ee"
+  engine_version          = "15.00.4198.2.v1"
+  instance_class          = "db.t3.xlarge"
+  license_model           = "license-included"
+  identifier              = "${var.mssql-db-target}-${var.environment_name}"
+  username                = data.aws_ssm_parameter.housing_finance_mssql_username.value
+  password                = data.aws_ssm_parameter.housing_finance_mssql_password.value
+  vpc_security_group_ids  = [aws_security_group.mtfh_finance_security_group.id]
+  db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
+  multi_az                = true
+  publicly_accessible     = false
   backup_retention_period = 30
-  storage_encrypted    = true
-  deletion_protection  = true
-  apply_immediately    = false
+  storage_encrypted       = true
+  deletion_protection     = true
+  apply_immediately       = false
+  skip_final_snapshot     = true
 
   tags = {
-    Name              = "housing-finance-db-${var.environment_name}"
+    Name              = "${var.mssql-db-target}-${var.environment_name}"
     Environment       = "${var.environment_name}"
     terraform-managed = true
     project_name      = "MTFH Finance"
   }
 }
 
-resource "aws_db_instance" "mssql-replica" {
-  allocated_storage         = 30
-  #engine                    = "sqlserver-ee"
-  #engine_version            = "15.00.4198.2.v1"
-  instance_class            = "db.t3.xlarge"
-  license_model             = "license-included"
-  identifier                = "housing-finance-sql-db-${var.environment_name}-replica"
-  replicate_source_db       = aws_db_instance.mssql.id
-  vpc_security_group_ids    = [aws_security_group.mtfh_finance_security_group.id]
-  db_subnet_group_name      = aws_db_subnet_group.mssql_db_subnets.name
-  multi_az                  = false
-  publicly_accessible       = false
-  #backup_retention_period  = 2
-  storage_encrypted         = true
+# create a read replica database from the EE instance
+resource "aws_db_instance" "db_ee_replica" {
+  allocated_storage   = 45
+  instance_class      = "db.t3.xlarge"
 
-  apply_immediately = "true"
+  #name
+  identifier          = "${var.mssql-db-target}-${var.environment_name}-replica"
+  skip_final_snapshot = true
+
+  replicate_source_db = aws_db_instance.mssql-ee.id
 
   tags = {
-    Name              = "housing-finance-db-${var.environment_name}"
+    Name              = "${var.mssql-db-target}-${var.environment_name}-replica"
     Environment       = "${var.environment_name}"
     terraform-managed = true
     project_name      = "MTFH Finance"
   }
 }
+
+# resource "aws_db_instance" "mssql-replica" {
+#   allocated_storage         = 30
+#   #engine                    = "sqlserver-ee"
+#   #engine_version            = "15.00.4198.2.v1"
+#   instance_class            = "db.t3.xlarge"
+#   license_model             = "license-included"
+#   identifier                = "housing-finance-sql-db-${var.environment_name}-replica"
+#   replicate_source_db       = aws_db_instance.mssql.id
+#   vpc_security_group_ids    = [aws_security_group.mtfh_finance_security_group.id]
+#   db_subnet_group_name      = aws_db_subnet_group.mssql_db_subnets.name
+#   multi_az                  = false
+#   publicly_accessible       = false
+#   #backup_retention_period  = 2
+#   storage_encrypted         = true
+
+#   apply_immediately = "true"
+
+#   tags = {
+#     Name              = "housing-finance-db-${var.environment_name}"
+#     Environment       = "${var.environment_name}"
+#     terraform-managed = true
+#     project_name      = "MTFH Finance"
+#   }
+# }
