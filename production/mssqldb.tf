@@ -46,6 +46,13 @@ resource "aws_db_instance" "mssql-ee" {
     terraform-managed = true
     project_name      = "MTFH Finance"
   }
+
+  lifecycle {
+    prevent_destroy   = true
+    ignore_changes    = [
+      storage_encrypted
+    ]
+  }  
 }
 
 # create a read replica database from the EE instance
@@ -65,4 +72,13 @@ resource "aws_db_instance" "db_ee_replica" {
     terraform-managed = true
     project_name      = "MTFH Finance"
   }
+
+  lifecycle {
+    prevent_destroy   = true
+    ignore_changes    = [
+      storage_encrypted,
+      allocated_storage,
+      deletion_protection
+    ]
+  }  
 }

@@ -25,7 +25,7 @@ resource "aws_db_instance" "mssql-ee" {
   allocated_storage       = 50
   engine                  = "sqlserver-ee"
   engine_version          = "15.00.4198.2.v1"
-  instance_class          = "db.t3.xlarge"
+  instance_class          = "db.m5.xlarge"
   license_model           = "license-included"
   identifier              = "${var.mssql-db-target}-${var.environment_name}"
   username                = data.aws_ssm_parameter.housing_finance_mssql_username.value
@@ -48,8 +48,11 @@ resource "aws_db_instance" "mssql-ee" {
   }
 
   lifecycle {
-    prevent_destroy = true
-  }
+    prevent_destroy   = true
+    ignore_changes    = [
+      storage_encrypted
+    ]
+  }  
 }
 
 # create a read replica database from the EE instance
@@ -71,6 +74,11 @@ resource "aws_db_instance" "db_ee_replica" {
   }
 
   lifecycle {
-    prevent_destroy = true
-  }  
+    prevent_destroy   = true
+    ignore_changes    = [
+      storage_encrypted,
+      allocated_storage,
+      deletion_protection
+    ]
+  } 
 }
