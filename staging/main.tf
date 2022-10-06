@@ -48,6 +48,16 @@ data "aws_ssm_parameter" "housing_finance_mssql_password" {
   name = "/housing-finance/staging/mssql-password"
 }
 
+data "aws_ssm_parameter" "hfs_master_postgres_database" {
+  name = "/housing-finance/staging/hfs-postgres-database"
+}
+data "aws_ssm_parameter" "hfs_master_postgres_username" {
+  name = "/housing-finance/staging/hfs-postgres-username"
+}
+data "aws_ssm_parameter" "hfs_master_postgres_password" {
+  name = "/housing-finance/staging/hfs-postgres-password"
+}
+
 resource "aws_security_group" "mtfh_finance_security_group" {
   name        = "mtfh-finance-allowdb-traffic-${var.environment_name}"
   description = "Allow traffic for the various database types"
