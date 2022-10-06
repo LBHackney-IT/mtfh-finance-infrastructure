@@ -8,7 +8,7 @@ module "postgres_db_master" {
   db_name              = data.aws_ssm_parameter.hfs_master_postgres_database.value
   db_engine            = var.db_engine
   db_engine_version    = var.db_engine_version
-  db_instance_class    = "db.m5.2xlarge" # check production 
+  db_instance_class    = "db.t3.medium" # check production 
   vpc_id               = "vpc-064521a7a4109ba31"
   db_allocated_storage = 50 # production = 240
   db_port              = var.db_port
@@ -28,8 +28,7 @@ resource "aws_db_instance" "postgres-replica-01" {
   identifier          = "${var.db_identifier}-replica-db-01-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.m5.2xlarge"
-  allocated_storage   = 50
+  instance_class      = "db.t3.medium"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-01-${var.environment_name}"
@@ -53,8 +52,7 @@ resource "aws_db_instance" "postgres-replica-02" {
   identifier          = "${var.db_identifier}-replica-db-02-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.m5.2xlarge"
-  allocated_storage   = 50
+  instance_class      = "db.t3.medium"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-02-${var.environment_name}"
@@ -78,8 +76,7 @@ resource "aws_db_instance" "postgres-replica-03" {
   identifier          = "${var.db_identifier}-replica-db-03-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.m5.2xlarge"
-  allocated_storage   = 50
+  instance_class      = "db.t3.medium"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-03-${var.environment_name}"
@@ -103,8 +100,7 @@ resource "aws_db_instance" "postgres-replica-04" {
   identifier          = "${var.db_identifier}-replica-db-04-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.m5.2xlarge"
-  allocated_storage   = 50
+  instance_class      = "db.t3.medium"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-04-${var.environment_name}"
