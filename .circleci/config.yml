@@ -49,7 +49,7 @@ commands:
             terraform init
           name: get and init
       - run:
-      # PLEASE LEAVE THIS AS A PLAN REQUEST, IF YOU WANT TO CHANGE IT THEN SPEAK TO HUMAIRAA FIRST. 
+      # PLEASE LEAVE THIS AS A PLAN, IF YOU WANT TO CHANGE IT THEN SPEAK TO HUMAIRAA FIRST. 
           name: plan
           command: |
             cd ./<<parameters.environment>>/
@@ -75,17 +75,17 @@ jobs:
   terraform-init-and-apply-to-development:
     executor: docker-terraform
     steps:
-      - terraform-init-then-apply:
+      - terraform-init-then-plan:
           environment: "development"
   terraform-init-and-apply-to-staging:
     executor: docker-terraform
     steps:
-      - terraform-init-then-apply:
+      - terraform-init-then-plan:
           environment: "staging"
   terraform-init-and-apply-to-production:
     executor: docker-terraform
     steps:
-      - terraform-init-then-apply:
+      - terraform-init-then-plan:
           environment: "production"
 
 workflows:
