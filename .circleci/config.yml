@@ -34,7 +34,7 @@ commands:
           root: *workspace_root
           paths:
             - .aws
-  terraform-init-then-apply:
+  terraform-init-then-plan:
     description: "Initializes and applies terraform configuration"
     parameters:
       environment:
@@ -49,10 +49,12 @@ commands:
             terraform init
           name: get and init
       - run:
-          name: apply
+      # PLEASE LEAVE THIS AS A PLAN REQUEST, IF YOU WANT TO CHANGE IT THEN SPEAK TO HUMAIRAA FIRST. 
+          name: plan
           command: |
             cd ./<<parameters.environment>>/
-            terraform apply -auto-approve
+            terraform plan
+    
 
 jobs:
   assume-role-development:
