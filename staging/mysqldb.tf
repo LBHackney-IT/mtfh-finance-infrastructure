@@ -20,7 +20,7 @@ resource "aws_db_instance" "housing-mysql-db" {
   password                    = data.aws_ssm_parameter.housing_finance_mysql_password.value
   vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
   db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
-  name                        = data.aws_ssm_parameter.housing_finance_mysql_database.value
+  db_name                        = data.aws_ssm_parameter.housing_finance_mysql_database.value
   monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
   backup_retention_period     = 30
   storage_encrypted           = false  //this should be true for production
