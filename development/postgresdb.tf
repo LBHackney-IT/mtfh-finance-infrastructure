@@ -5,7 +5,7 @@ module "postgres_db_development" {
   environment_name = "development"
   vpc_id =  "vpc-0d15f152935c8716f"
   db_engine = "postgres"
-  db_engine_version = "12.11"
+  db_engine_version = "12.14"
   db_identifier = "mtfh-finance-pgdb"
   db_instance_class = "db.t3.micro"
   db_name = data.aws_ssm_parameter.housing_finance_postgres_database.value
