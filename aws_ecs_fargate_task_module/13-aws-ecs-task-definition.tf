@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   tags     = var.tags
   for_each = { for task in local.tasks : task.task_id => task }
 
-  family                   = "${each.value.task_id}${var.operation_name}"
+  family                   = "${each.value.task_id}-task"
   container_definitions    = data.template_file.task_definition_template[each.key].rendered
   requires_compatibilities = ["FARGATE"]
   cpu                      = each.value.task_cpu

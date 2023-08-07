@@ -1,3 +1,6 @@
+
+
+
 data "aws_ssm_parameter" "housing_finance_mssql_dbhost" {
   name = "/housing-finance/development/db-host"
 }
@@ -11,6 +14,7 @@ data "aws_ssm_parameter" "housing_finance_mssql_password" {
   name = "/housing-finance/development/db-password"
 }
 
+# Task Role IAM Policy doc
 data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
 
   # Cloudwatch Logs full access
@@ -34,23 +38,25 @@ data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
   }
 }
 
+# ECS Cluster
 resource "aws_ecs_cluster" "workers" {
+  name = "${var.operation_name}-cluster-${var.environment}"
+
   tags = {
     "Process" = "Housing Finance"
     "Domain"  = "HFS Nightly Jobs"
   }
-  # name = "${var.operation_name}"
-  name = "hfs-nightly-jobs-charges-ingest-cluster"
 }
 
+# Using the Fargate Task module
 module "hfs-nightly-charges" {
-  source = "../aws_ecs_fargate_task_module"
+  source = "../../aws_ecs_fargate_task_module"
 
   tags = {
     "tag1" = "value1"
     "tag2" = "value2"
   }
-  operation_name                = "hfs-nightly-jobs-charges-ingest-tf"
+  operation_name                = "${var.operation_name}"
   ecs_task_role_policy_document = data.aws_iam_policy_document.hfs_nightly_charges_task_role.json
   aws_subnet_ids = [
       "subnet-05ce390ba88c42bfd",

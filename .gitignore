@@ -4,3 +4,7 @@
 /production/.terraform
 /staging/.terraform.lock.hcl
 /production/.terraform.lock.hcl
+*.hcl
+*.exe
+*.tfstate
+*.backup
