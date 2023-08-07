@@ -53,8 +53,8 @@ module "hfs-nightly-charges" {
   operation_name                = "hfs-nightly-jobs-charges-ingest-tf"
   ecs_task_role_policy_document = data.aws_iam_policy_document.hfs_nightly_charges_task_role.json
   aws_subnet_ids = [
-    "subnet-05ce390ba88c42bfd",
-  "subnet-0140d06fb84fdb547"]
+      "subnet-05ce390ba88c42bfd",
+      "subnet-0140d06fb84fdb547"]
   ecs_cluster_arn = aws_ecs_cluster.workers.arn
 
   tasks = [
