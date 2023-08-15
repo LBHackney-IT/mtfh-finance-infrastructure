@@ -21,6 +21,9 @@ data "aws_ssm_parameter" "google_api_key" {
 data "aws_ssm_parameter" "charges_batch_years" {
   name = "${local.ssm_path}/charges-batch-years"
 }
+data "aws_ssm_parameter" "batch_size" {
+  name = "${local.ssm_path}/bulk-insert-batch-size"
+}
 
 # Task Role IAM Policy doc
 data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
@@ -107,7 +110,8 @@ module "hfs-nightly-charges" {
         { name = "DB_USER", value = data.aws_ssm_parameter.housing_finance_mssql_username.value },
         { name = "DB_PASSWORD", value = data.aws_ssm_parameter.housing_finance_mssql_password.value },
         { name = "GOOGLE_API_KEY", value = data.aws_ssm_parameter.google_api_key.value },
-        { name = "CHARGES_BATCH_YEARS", value = data.aws_ssm_parameter.charges_batch_years.value }
+        { name = "CHARGES_BATCH_YEARS", value = data.aws_ssm_parameter.charges_batch_years.value },
+        { name = "BATCH_SIZE", value = data.aws_ssm_parameter.batch_size.value }
       ]
 
       cloudwatch_rule_schedule_expression = "cron(30 0 * * ? *)"
