@@ -47,6 +47,18 @@ data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
     ]
     resources = ["*"]
   }
+
+  # SNS Read Only Access and Publish
+  statement {
+    effect = "Allow"
+    actions = [
+      "sns:Get*",
+      "sns:List*",
+      "sns:Subscribe",
+      "sns:Publish"
+    ]
+    resources = ["*"]
+  }
 }
 
 # ECS Cluster
@@ -85,6 +97,11 @@ resource "aws_security_group_rule" "inbound_traffic_to_mssql" {
   ipv6_cidr_blocks  = ["::/0"]
 }
 
+# Create an SNS Topic. There should only be a single nightly jobs Topic per environment to service this and any future ECS Nightly Job process
+resource "aws_sns_topic" "sns_alarms" {
+  name = "hfs-nightly-jobs-alarms-${var.environment}"
+}
+
 # Using the Fargate Task module
 module "hfs-nightly-charges" {
   source = "../../aws_ecs_fargate_task_module"
@@ -105,13 +122,15 @@ module "hfs-nightly-charges" {
       task_cpu    = 256
       task_memory = 512
       environment_variables = [
+        { name = "ENVIRONMENT", value = "${var.environment}" },
         { name = "DB_HOST", value = data.aws_ssm_parameter.housing_finance_mssql_dbhost.value },
         { name = "DB_NAME", value = data.aws_ssm_parameter.housing_finance_mssql_database.value },
         { name = "DB_USER", value = data.aws_ssm_parameter.housing_finance_mssql_username.value },
         { name = "DB_PASSWORD", value = data.aws_ssm_parameter.housing_finance_mssql_password.value },
         { name = "GOOGLE_API_KEY", value = data.aws_ssm_parameter.google_api_key.value },
         { name = "CHARGES_BATCH_YEARS", value = data.aws_ssm_parameter.charges_batch_years.value },
-        { name = "BATCH_SIZE", value = data.aws_ssm_parameter.batch_size.value }
+        { name = "BATCH_SIZE", value = data.aws_ssm_parameter.batch_size.value },
+        { name = "SNS_TOPIC_ARN", value = aws_sns_topic.sns_alarms.arn }
       ]
 
       cloudwatch_rule_schedule_expression = "cron(30 0 * * ? *)"
