@@ -1,30 +1,3 @@
-locals {
-  ssm_path = "${var.housing_finance_prefix}/${var.environment}"
-}
-
-# Environment variables for the Task
-data "aws_ssm_parameter" "housing_finance_mssql_dbhost" {
-  name = "${local.ssm_path}/db-host"
-}
-data "aws_ssm_parameter" "housing_finance_mssql_database" {
-  name = "${local.ssm_path}/mssql-database"
-}
-data "aws_ssm_parameter" "housing_finance_mssql_username" {
-  name = "${local.ssm_path}/mssql-username"
-}
-data "aws_ssm_parameter" "housing_finance_mssql_password" {
-  name = "${local.ssm_path}/db-password"
-}
-data "aws_ssm_parameter" "google_api_key" {
-  name = "${local.ssm_path}/google-application-credentials-json"
-}
-data "aws_ssm_parameter" "charges_batch_years" {
-  name = "${local.ssm_path}/charges-batch-years"
-}
-data "aws_ssm_parameter" "batch_size" {
-  name = "${local.ssm_path}/bulk-insert-batch-size"
-}
-
 # Task Role IAM Policy doc
 data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
 
