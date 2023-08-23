@@ -58,7 +58,7 @@ resource "aws_security_group" "hfs_nightly_jobs" {
   }
 }
 
-# Add a Security Group Rule for MSSQL outgoing traffic
+# Add a Security Group Rule for MSSQL inbound traffic
 resource "aws_security_group_rule" "inbound_traffic_to_mssql" {
   description       = "Allow inbound traffic to MSSQL RDS"
   security_group_id = aws_security_group.hfs_nightly_jobs.id
@@ -70,7 +70,7 @@ resource "aws_security_group_rule" "inbound_traffic_to_mssql" {
   ipv6_cidr_blocks  = ["::/0"]
 }
 
-# Create an SNS Topic. There should only be a single nightly jobs Topic per environment to service this and any future ECS Nightly Job process
+# Create an SNS Topic. There should only be a single Topic for HFS Nightly Jobs - per environment (reuse this for any future Fargate process)
 resource "aws_sns_topic" "sns_alarms" {
   name = "hfs-nightly-jobs-alarms-${var.environment}"
 }
