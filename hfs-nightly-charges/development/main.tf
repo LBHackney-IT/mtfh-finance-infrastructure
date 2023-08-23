@@ -123,13 +123,6 @@ module "hfs-nightly-charges" {
       task_memory = 512
       environment_variables = [
         { name = "ENVIRONMENT", value = "${var.environment}" },
-        { name = "DB_HOST", value = data.aws_ssm_parameter.housing_finance_mssql_dbhost.value },
-        { name = "DB_NAME", value = data.aws_ssm_parameter.housing_finance_mssql_database.value },
-        { name = "DB_USER", value = data.aws_ssm_parameter.housing_finance_mssql_username.value },
-        { name = "DB_PASSWORD", value = data.aws_ssm_parameter.housing_finance_mssql_password.value },
-        { name = "GOOGLE_API_KEY", value = data.aws_ssm_parameter.google_api_key.value },
-        { name = "CHARGES_BATCH_YEARS", value = data.aws_ssm_parameter.charges_batch_years.value },
-        { name = "BATCH_SIZE", value = data.aws_ssm_parameter.batch_size.value },
         { name = "SNS_TOPIC_ARN", value = aws_sns_topic.sns_alarms.arn }
       ]
 
