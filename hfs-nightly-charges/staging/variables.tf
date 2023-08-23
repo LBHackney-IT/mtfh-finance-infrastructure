@@ -9,17 +9,17 @@ variable "operation_name" {
 
 variable "environment" {
   type    = string
-  default = "development"
+  default = "staging"
 }
 
 variable "vpc_id" {
   type    = string
-  default = "vpc-0d15f152935c8716f"
+  default = "vpc-064521a7a4109ba31"
 }
 
 variable "aws_subnet_ids" {
   type    = list(any)
-  default = ["subnet-05ce390ba88c42bfd", "subnet-0140d06fb84fdb547"]
+  default = ["subnet-0743d86e9b362fa38","subnet-0ea0020a44b98a2ca"]
 }
 
 variable "charges_cron_expression" {

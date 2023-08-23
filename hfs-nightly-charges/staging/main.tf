@@ -104,6 +104,6 @@ module "hfs-nightly-charges" {
     }
   ]
 
-  # Using the custom security groups created above. The default on development = ["sg-00d2e14f38245dd0b"]
+  # Using the custom security groups created above
   security_groups = [aws_security_group.hfs_nightly_jobs.id]
 }
