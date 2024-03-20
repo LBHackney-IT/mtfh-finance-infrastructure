@@ -18,7 +18,7 @@ resource "aws_db_subnet_group" "db_subnets" {
 
 resource "aws_db_instance" "lbh-db" {
   engine = "postgres"
-  engine_version = "12.14"
+  engine_version = "12.17"
   identifier = "mtfh-finance-pgdb-db-development"
   instance_class = "db.t3.micro"
   db_name = data.aws_ssm_parameter.housing_finance_postgres_database.value
