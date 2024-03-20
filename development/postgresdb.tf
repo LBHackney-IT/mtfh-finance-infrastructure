@@ -28,7 +28,7 @@ resource "aws_db_instance" "lbh-db" {
   db_subnet_group_name = aws_db_subnet_group.db_subnets.name
   allocated_storage = 20
   maintenance_window ="sun:10:00-sun:10:30"
-  storage_encrypted = false
+  storage_encrypted = true
   multi_az = false //only true if production deployment
 
   storage_type                = "gp2" //ssd
