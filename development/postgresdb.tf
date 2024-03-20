@@ -23,7 +23,6 @@ module "postgres_db_development" {
   backup_window               = "00:01-00:31"
   monitoring_interval         = 0 //this is for enhanced Monitoring there will allready be some basic monitering avalable
   backup_retention_period     = 30
-  storage_encrypted           = true
   deletion_protection         = false
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
