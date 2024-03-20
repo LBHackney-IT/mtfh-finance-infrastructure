@@ -16,7 +16,7 @@ resource "aws_db_subnet_group" "db_subnets" {
   }
 }
 
-resource "aws_db_instance" "postgres_db_development" {
+resource "aws_db_instance" "lbh-db" {
   engine = "postgres"
   engine_version = "12.14"
   identifier = "mtfh-finance-pgdb-db-development"
@@ -30,7 +30,6 @@ resource "aws_db_instance" "postgres_db_development" {
   maintenance_window ="sun:10:00-sun:10:30"
   storage_encrypted = false
   multi_az = false //only true if production deployment
-  publicly_accessible = false
 
   storage_type                = "gp2" //ssd
   backup_window               = "00:01-00:31"
@@ -42,6 +41,7 @@ resource "aws_db_instance" "postgres_db_development" {
 
   apply_immediately   = false
   skip_final_snapshot = true
+  publicly_accessible = false
 
   tags = {
     Name              = "${data.aws_ssm_parameter.housing_finance_postgres_database.value}-db-development"
