@@ -18,4 +18,23 @@ module "postgres_db_development" {
   multi_az = false //only true if production deployment
   publicly_accessible = false
   project_name = "housing finance"
+
+  storage_type                = "gp2" //ssd
+  backup_window               = "00:01-00:31"
+  monitoring_interval         = 0 //this is for enhanced Monitoring there will allready be some basic monitering avalable
+  backup_retention_period     = 30
+  storage_encrypted           = true
+  deletion_protection         = false
+  auto_minor_version_upgrade  = true
+  allow_major_version_upgrade = false
+
+  apply_immediately   = false
+  skip_final_snapshot = true
+
+  tags = {
+    Name              = "${data.aws_ssm_parameter.housing_finance_postgres_database.value}-db-development"
+    Environment       = "development"
+    terraform-managed = true
+    project_name      = var.project_name
+  }
 }
