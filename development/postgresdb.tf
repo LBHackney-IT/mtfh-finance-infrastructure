@@ -34,6 +34,6 @@ resource "aws_db_instance" "postgres_db_development" {
     Name              = "${data.aws_ssm_parameter.housing_finance_postgres_database.value}-db-development"
     Environment       = "development"
     terraform-managed = true
-    project_name      = var.project_name
+    project_name      = "housing finance"
   }
 }
