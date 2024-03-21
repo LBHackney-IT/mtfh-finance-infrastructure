@@ -48,7 +48,7 @@ resource "aws_db_instance" "hfs-mssql-web" {
   }
 
   lifecycle {
-    prevent_destroy   = true
+    prevent_destroy   = false
     ignore_changes    = [
       storage_encrypted
     ]
