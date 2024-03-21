@@ -92,6 +92,11 @@ jobs:
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
+  terraform-init-and-plan-to-development:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-plan:
+          environment: "development"
   terraform-init-and-apply-to-development:
     executor: docker-terraform
     steps:
@@ -116,9 +121,16 @@ workflows:
           # filters:
           #    branches:
           #      only: development
+      - terraform-init-and-plan-to-development:
+          requires:
+              - assume-role-development
+      - permit-production-terraform-release:
+          type: approval
+          requires:
+            - terraform-init-then-plan-to-development
       - terraform-init-and-apply-to-development:
           requires:
-            - assume-role-development
+            - permit-production-terraform-release
           # filters:
           #   branches:
           #     only: development
