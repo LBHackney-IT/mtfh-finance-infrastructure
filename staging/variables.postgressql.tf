@@ -16,7 +16,7 @@ variable "db_engine" {
 }
 variable "db_engine_version" {
   type    = string
-  default = "14.3"
+  default = "14.10"
 }
 variable "maintenance_window" {
   type    = string 
