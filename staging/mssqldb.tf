@@ -25,7 +25,7 @@ resource "aws_db_instance" "mssql-ee" {
   allocated_storage       = 50
   engine                  = "sqlserver-ee"
   engine_version          = "15.00.4198.2.v1"
-  instance_class          = "db.m5.xlarge"
+  instance_class          = "db.t3.xlarge"
   license_model           = "license-included"
   identifier              = "${var.mssql-db-target}-${var.environment_name}"
   username                = data.aws_ssm_parameter.housing_finance_mssql_username.value
@@ -56,29 +56,30 @@ resource "aws_db_instance" "mssql-ee" {
 }
 
 # create a read replica database from the EE instance
-resource "aws_db_instance" "db_ee_replica" {
-  allocated_storage   = 30
-  instance_class      = "db.t3.xlarge"
-
-  #name
-  identifier          = "${var.mssql-db-target}-replica-${var.environment_name}"
-  skip_final_snapshot = true
-
-  replicate_source_db = aws_db_instance.mssql-ee.id
-
-  tags = {
-    Name              = "${var.mssql-db-target}-replica-${var.environment_name}"
-    Environment       = "${var.environment_name}"
-    terraform-managed = true
-    project_name      = "MTFH Finance"
-  }
-
-  lifecycle {
-    prevent_destroy   = true
-    ignore_changes    = [
-      storage_encrypted,
-      allocated_storage,
-      deletion_protection
-    ]
-  } 
-}
+# TODO: If this isn't being used, remove it
+#resource "aws_db_instance" "db_ee_replica" {
+#  allocated_storage   = 30
+#  instance_class      = "db.t3.xlarge"
+#
+#  #name
+#  identifier          = "${var.mssql-db-target}-replica-${var.environment_name}"
+#  skip_final_snapshot = true
+#
+#  replicate_source_db = aws_db_instance.mssql-ee.id
+#
+#  tags = {
+#    Name              = "${var.mssql-db-target}-replica-${var.environment_name}"
+#    Environment       = "${var.environment_name}"
+#    terraform-managed = true
+#    project_name      = "MTFH Finance"
+#  }
+#
+#  lifecycle {
+#    prevent_destroy   = true
+#    ignore_changes    = [
+#      storage_encrypted,
+#      allocated_storage,
+#      deletion_protection
+#    ]
+#  } 
+#}
