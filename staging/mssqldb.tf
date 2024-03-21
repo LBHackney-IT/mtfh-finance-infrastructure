@@ -24,7 +24,7 @@ resource "aws_db_instance" "hfs-mssql-web" {
 
   allocated_storage       = 50
   engine                  = "sqlserver-web"
-  engine_version          = "15.00.4198.2.v1"
+  engine_version          = "15.00.4073.23.v1"
   instance_class          = "db.t3.xlarge"
   license_model           = "license-included"
   identifier              = "${var.mssql-db-target}-${var.environment_name}"
