@@ -1,7 +1,7 @@
 # Postg Database Setup
 
 module "postgres_db_development" {
-  source = "../postgres-module"
+  source = "../modules/postgres"
   environment_name = "development"
   vpc_id =  "vpc-0d15f152935c8716f"
   db_engine = "postgres"
