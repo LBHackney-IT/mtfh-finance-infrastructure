@@ -19,11 +19,11 @@ resource "aws_db_snapshot" "db1_snapshot" {
 }
 
 # use Snapshot1 to create a database with EE instance
-resource "aws_db_instance" "mssql-ee" {
+resource "aws_db_instance" "hfs-mssql-web" {
   snapshot_identifier = aws_db_snapshot.db1_snapshot.id
 
   allocated_storage       = 50
-  engine                  = "sqlserver-ee"
+  engine                  = "sqlserver-web"
   engine_version          = "15.00.4198.2.v1"
   instance_class          = "db.t3.xlarge"
   license_model           = "license-included"
