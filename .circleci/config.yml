@@ -54,6 +54,26 @@ commands:
           command: |
             cd ./<<parameters.environment>>/
             terraform plan
+            
+  terraform-init-then-apply:
+    description: "Initializes and applies terraform configuration"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform get -update=true
+            terraform init
+          name: get and init
+      - run:
+          name: apply
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform apply -auto-approve
     
 
 jobs:
@@ -75,7 +95,7 @@ jobs:
   terraform-init-and-apply-to-development:
     executor: docker-terraform
     steps:
-      - terraform-init-then-plan:
+      - terraform-init-then-apply:
           environment: "development"
   terraform-init-and-apply-to-staging:
     executor: docker-terraform
