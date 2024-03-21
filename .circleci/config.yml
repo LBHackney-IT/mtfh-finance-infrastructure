@@ -34,6 +34,7 @@ commands:
           root: *workspace_root
           paths:
             - .aws
+  # Init then Plan is used for "Preview" - don't add any "apply" steps
   terraform-init-then-plan:
     description: "Initializes and applies terraform configuration"
     parameters:
@@ -54,7 +55,7 @@ commands:
           command: |
             cd ./<<parameters.environment>>/
             terraform plan
-            
+  # Used for actual deployment of Terraform resources.
   terraform-init-then-apply:
     description: "Initializes and applies terraform configuration"
     parameters:
@@ -74,9 +75,9 @@ commands:
           command: |
             cd ./<<parameters.environment>>/
             terraform apply -auto-approve
-    
 
 jobs:
+  # Auth:
   assume-role-development:
     executor: docker-python
     steps:
@@ -92,11 +93,23 @@ jobs:
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
+  # Infrastructure changes preview:
   preview-terraform-development-changes:
     executor: docker-terraform
     steps:
       - terraform-init-then-plan:
           environment: "development"
+  preview-terraform-staging-changes:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-plan:
+          environment: "staging"
+  preview-terraform-production-changes:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-plan:
+          environment: "production"
+  # Infrastructure deployment:
   terraform-init-and-apply-to-development:
     executor: docker-terraform
     steps:
@@ -141,26 +154,57 @@ workflows:
           filters:
              branches:
                only: main
-      - terraform-init-and-apply-to-staging:
+      - preview-terraform-staging-changes:
           requires:
             - assume-role-staging
           filters:
             branches:
               only: main
-      - permit-production-release:
+      - permit-staging-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-staging-changes
+          filters:
+            branches:
+              only: main
+      - terraform-init-and-apply-to-staging:
+          requires:
+            - permit-staging-terraform-release
+          filters:
+            branches:
+              only: main
+      - start-production-release:
+          # This approval is needed to make assume role prod trigger
+          # when we actually need it, otherwise the temp creds will expire
           type: approval
           requires:
             - terraform-init-and-apply-to-staging
+          filters:
+            branches:
+              only: main
       - assume-role-production:
           context: api-assume-role-housing-production-context
           requires:
-              - permit-production-release
+              - start-production-release
           filters:
              branches:
                only: main
-      - terraform-init-and-apply-to-production:
+      - preview-terraform-production-changes:
           requires:
             - assume-role-production
+          filters:
+            branches:
+              only: main
+      - permit-production-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-production-changes
+          filters:
+            branches:
+              only: main
+      - terraform-init-and-apply-to-production:
+          requires:
+            - permit-production-terraform-release
           filters:
             branches:
               only: main

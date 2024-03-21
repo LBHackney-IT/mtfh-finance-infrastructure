@@ -1,7 +1,7 @@
 
 # HFS Postgres Master database
 module "postgres_db_master" {
-  source = "github.com/LBHackney-IT/aws-hackney-common-terraform.git/modules/database/postgres"
+  source = "../modules/postgres"
 
   environment_name     = var.environment_name
   db_identifier        = "${var.db_identifier}-master"
