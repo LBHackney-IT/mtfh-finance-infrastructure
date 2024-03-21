@@ -1,7 +1,7 @@
 # Postg Database Setup
 
 module "postgres_db_staging" {
-  source = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/database/postgres"
+  source = "../modules/postgres"
   environment_name = "staging"
   vpc_id =  "vpc-064521a7a4109ba31"
   db_engine = "postgres"
