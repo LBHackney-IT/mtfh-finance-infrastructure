@@ -118,7 +118,7 @@ jobs:
   terraform-init-and-apply-to-staging:
     executor: docker-terraform
     steps:
-      - terraform-init-then-plan:
+      - terraform-init-then-apply:
           environment: "staging"
   terraform-init-and-apply-to-production:
     executor: docker-terraform
