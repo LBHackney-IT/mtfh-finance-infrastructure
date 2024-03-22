@@ -8,11 +8,11 @@ resource "aws_elasticache_subnet_group" "redis_subnets" {
 
 resource "aws_elasticache_replication_group" "redis_cache" {
   automatic_failover_enabled    = true
-  availability_zones            = ["eu-west-2a", "eu-west-2b"]
+  preferred_cache_cluster_azs   = ["eu-west-2a", "eu-west-2b"]
   replication_group_id          = "redis-finance-${var.environment_name}-1"
-  replication_group_description = "mtfh finance redis group"
+  description = "mtfh finance redis group"
   node_type             = "cache.t3.small"
-  number_cache_clusters = 2
+  num_cache_clusters    = 2
   parameter_group_name  = "default.redis5.0"
   engine_version        = "5.0.6"
   port                  = 6379
