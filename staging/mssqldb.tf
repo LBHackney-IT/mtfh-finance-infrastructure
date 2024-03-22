@@ -32,7 +32,6 @@ resource "aws_db_instance" "hfs-mssql-web" {
   password                = data.aws_ssm_parameter.housing_finance_mssql_password.value
   vpc_security_group_ids  = [aws_security_group.mtfh_finance_security_group.id]
   db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
-  multi_az                = true
   publicly_accessible     = false
   backup_retention_period = 7
   skip_final_snapshot     = true
