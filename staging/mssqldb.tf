@@ -22,7 +22,7 @@ resource "aws_db_snapshot" "db1_snapshot" {
 resource "aws_db_instance" "hfs-mssql-web" {
   snapshot_identifier = aws_db_snapshot.db1_snapshot.id
 
-  allocated_storage       = 50
+  allocated_storage       = 40
   engine                  = "sqlserver-web"
   engine_version          = "15.00.4073.23.v1"
   instance_class          = "db.t3.xlarge"
@@ -34,11 +34,11 @@ resource "aws_db_instance" "hfs-mssql-web" {
   db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
   multi_az                = true
   publicly_accessible     = false
-  backup_retention_period = 2
+  backup_retention_period = 7
   skip_final_snapshot     = true
   apply_immediately       = true
   iam_database_authentication_enabled = false
-  storage_encrypted       = false
+  storage_encrypted       = true
 
   tags = {
     Name              = "${var.mssql-db-target}-${var.environment_name}"
