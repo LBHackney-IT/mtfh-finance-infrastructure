@@ -95,7 +95,7 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-    ingress {
+  ingress {
     description      = "Allow traffic for income api"
     from_port        = 3000
     to_port          = 3000
@@ -103,7 +103,7 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-    ingress {
+  ingress {
     description      = "Allow traffic for manage arrears front end"
     from_port        = 3001
     to_port          = 3001
@@ -111,7 +111,18 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-
+  ingress {
+    description      = "Allow Postgres"
+    from_port        = 5432
+    to_port          = 5432
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+  }
+  
   egress {
     from_port        = 0
     to_port          = 0
