@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "db_subnets" {
 resource "aws_db_instance" "housing-mysql-db" {
   identifier                  = "housing-finance-db-${var.environment_name}"
   engine                      = "mysql"
-  engine_version              = "8.0.23"
+  engine_version              = "8.0.35"
   instance_class              = "db.t3.medium"
   allocated_storage           = 50
   storage_type                = "gp2"
@@ -44,7 +44,7 @@ resource "aws_db_instance" "housing-mysql-db" {
 
 resource "aws_db_instance" "housing-mysql-db-replica" {
   identifier                  = "housing-finance-db-${var.environment_name}-replica"
-  replicate_source_db         = aws_db_instance.housing-mysql-db.id
+  replicate_source_db         = aws_db_instance.housing-mysql-db.identifier
   instance_class              = "db.t3.medium"
   allocated_storage           = 50
   storage_type                = "gp2"
@@ -68,5 +68,6 @@ resource "aws_db_instance" "housing-mysql-db-replica" {
     Environment       = "${var.environment_name}"
     terraform-managed = true
     project_name      = "MTFH Finance"
+    BackupPolicy      = "Prod"
   }
 }
