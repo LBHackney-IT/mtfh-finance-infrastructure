@@ -49,13 +49,13 @@ data "aws_ssm_parameter" "housing_finance_mssql_password" {
 }
 
 data "aws_ssm_parameter" "hfs_master_postgres_database" {
-  name = "/housing-finance/staging/hfs-postgres-database"
+  name = "/housing-finance/production/hfs-postgres-database"
 }
 data "aws_ssm_parameter" "hfs_master_postgres_username" {
-  name = "/housing-finance/staging/hfs-postgres-username"
+  name = "/housing-finance/production/hfs-postgres-username"
 }
 data "aws_ssm_parameter" "hfs_master_postgres_password" {
-  name = "/housing-finance/staging/hfs-postgres-password"
+  name = "/housing-finance/production/hfs-postgres-password"
 }
 
 resource "aws_security_group" "mtfh_finance_security_group" {
