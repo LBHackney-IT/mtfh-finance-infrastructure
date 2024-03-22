@@ -56,13 +56,18 @@ resource "aws_db_instance" "postgres-replica-02" {
   identifier          = "${var.db_identifier}-replica-db-02-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+  instance_class      = "db.t3.large"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-02-${var.environment_name}"
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy = "Prod"
   }
 
   lifecycle {
@@ -80,13 +85,18 @@ resource "aws_db_instance" "postgres-replica-03" {
   identifier          = "${var.db_identifier}-replica-db-03-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+  instance_class      = "db.t3.large"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-03-${var.environment_name}"
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy = "Prod"
   }
 
   lifecycle {
@@ -104,13 +114,18 @@ resource "aws_db_instance" "postgres-replica-04" {
   identifier          = "${var.db_identifier}-replica-db-04-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+  instance_class      = "db.t3.large"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-04-${var.environment_name}"
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy = "Prod"
   }
 
   lifecycle {
