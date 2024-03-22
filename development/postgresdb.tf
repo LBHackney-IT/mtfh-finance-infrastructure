@@ -19,5 +19,5 @@ module "postgres_db_development" {
   multi_az = false //only true if production deployment
   publicly_accessible = false
   project_name = "housing finance"
-  vpc_security_group_ids = [module.db_security_group.security_group_id]
+  vpc_security_group_ids = ["sg-0b1844c4c2d5096a2"] // mtfh-finance-allowdb-traffic-production	
 }
