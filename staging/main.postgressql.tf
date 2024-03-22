@@ -20,7 +20,7 @@ module "postgres_db_master" {
   maintenance_window   = var.maintenance_window
   publicly_accessible  = var.publicly_accessible
   project_name         = var.project_name
-  vpc_security_group_ids = ["sg-073e2b36118911fc4"]
+  vpc_security_group_ids = ["sg-0ce270bb666a7ad64"]
 }
 
 
