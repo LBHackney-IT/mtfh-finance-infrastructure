@@ -52,5 +52,5 @@ variable "project_name" {
 
 variable "backup_policy" {
   type = string
-  default = "None"
+  default = null
 }
