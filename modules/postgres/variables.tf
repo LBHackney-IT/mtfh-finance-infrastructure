@@ -49,3 +49,8 @@ variable "publicly_accessible" {
 variable "project_name" {
   type = string
 }
+
+variable "backup_policy" {
+  type = string
+  default = "None"
+}

@@ -38,3 +38,8 @@ variable "project_name" {
   type    = string
   default = "Housing-Finance PostgresSQL master and read-replica cluster"
 }
+
+variable "backup_policy" {
+  type    = string
+  default = "Prod"
+}

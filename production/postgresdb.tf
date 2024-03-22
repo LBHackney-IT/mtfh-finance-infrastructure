@@ -5,7 +5,7 @@ module "postgres_db_production" {
   environment_name = "production"
   vpc_id =  "vpc-0ce853ddb64e8fb3c"
   db_engine = "postgres"
-  db_engine_version = "12.8"
+  db_engine_version = "12.17"
   db_identifier = "mtfh-finance-pgdb"
   db_instance_class = "db.t3.large"
   db_name = data.aws_ssm_parameter.housing_finance_postgres_database.value
@@ -19,4 +19,5 @@ module "postgres_db_production" {
   multi_az = true //only true if production deployment
   publicly_accessible = false
   project_name = "housing finance"
+  backup_policy = "Prod"
 }

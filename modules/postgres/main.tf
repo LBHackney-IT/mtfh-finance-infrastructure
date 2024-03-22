@@ -24,10 +24,10 @@ resource "aws_db_instance" "lbh-db" {
   storage_type                = "gp2" //ssd
   port                        = var.db_port
   maintenance_window          = var.maintenance_window
-  backup_window               = "00:01-00:31"
+  backup_window               = "08:45-09:15"
   username                    = var.db_username
   password                    = var.db_password
-  vpc_security_group_ids      = [module.db_security_group.db_sg_id]
+  vpc_security_group_ids      = ["sg-01396d0029aa1c950", "sg-07d40f16ad18f1f60"]
   db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
   db_name                     = var.db_name
   monitoring_interval         = 0 //this is for enhanced Monitoring there will allready be some basic monitering avalable
@@ -38,6 +38,8 @@ resource "aws_db_instance" "lbh-db" {
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
 
+  enabled_cloudwatch_logs_exports = ["postgresql"]
+
   apply_immediately   = false
   skip_final_snapshot = true
   publicly_accessible = var.publicly_accessible
@@ -47,5 +49,10 @@ resource "aws_db_instance" "lbh-db" {
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = var.backup_policy
+  }
+
+  tags_all = {
+    BackupPolicy = var.backup_policy
   }
 }

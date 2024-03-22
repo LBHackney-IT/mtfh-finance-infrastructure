@@ -7,7 +7,7 @@ module "postgres_db_master" {
   db_name              = data.aws_ssm_parameter.hfs_master_postgres_database.value
   db_engine            = var.db_engine
   db_engine_version    = var.db_engine_version
-  db_instance_class    = "db.t3.medium" # check production 
+  db_instance_class    = "db.t3.large" # check production 
   vpc_id               = "vpc-0ce853ddb64e8fb3c"
   db_allocated_storage = 240
   db_port              = var.db_port
@@ -19,6 +19,7 @@ module "postgres_db_master" {
   maintenance_window   = var.maintenance_window
   publicly_accessible  = var.publicly_accessible
   project_name         = var.project_name
+  backup_policy        = var.backup_policy
 }
 
 
