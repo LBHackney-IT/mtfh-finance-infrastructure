@@ -27,7 +27,7 @@ resource "aws_db_instance" "lbh-db" {
   backup_window               = "08:45-09:15"
   username                    = var.db_username
   password                    = var.db_password
-  vpc_security_group_ids      = ["sg-01396d0029aa1c950", "sg-07d40f16ad18f1f60"]
+  vpc_security_group_ids      = var.vpc_security_group_ids
   db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
   db_name                     = var.db_name
   monitoring_interval         = 0 //this is for enhanced Monitoring there will allready be some basic monitering avalable

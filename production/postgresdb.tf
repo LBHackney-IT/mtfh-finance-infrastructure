@@ -20,4 +20,5 @@ module "postgres_db_production" {
   publicly_accessible = false
   project_name = "housing finance"
   backup_policy = "Prod"
+  vpc_security_group_ids = [module.db_security_group.security_group_id]
 }

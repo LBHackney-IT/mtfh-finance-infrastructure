@@ -49,8 +49,10 @@ variable "publicly_accessible" {
 variable "project_name" {
   type = string
 }
-
 variable "backup_policy" {
   type = string
   default = null
+}
+variable "vpc_security_group_ids" {
+  type = list(string)
 }
