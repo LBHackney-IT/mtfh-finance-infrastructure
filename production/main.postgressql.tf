@@ -27,13 +27,18 @@ resource "aws_db_instance" "postgres-replica-01" {
   identifier          = "${var.db_identifier}-replica-db-01-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+  instance_class      = "db.t3.large"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-01-${var.environment_name}"
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy = "Prod"
   }
 
   lifecycle {
