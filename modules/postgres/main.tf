@@ -24,7 +24,7 @@ resource "aws_db_instance" "lbh-db" {
   storage_type                = "gp2" //ssd
   port                        = var.db_port
   maintenance_window          = var.maintenance_window
-  backup_window               = "08:45-09:15"
+  backup_window               = var.backup_window
   username                    = var.db_username
   password                    = var.db_password
   vpc_security_group_ids      = var.vpc_security_group_ids

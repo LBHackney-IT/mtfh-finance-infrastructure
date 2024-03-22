@@ -17,6 +17,7 @@ module "postgres_db_master" {
   storage_encrypted    = var.storage_encrypted
   multi_az             = var.multi_az
   maintenance_window   = var.maintenance_window
+  backup_window        = "00:01-00:31"
   publicly_accessible  = var.publicly_accessible
   project_name         = var.project_name
   backup_policy        = var.backup_policy

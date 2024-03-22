@@ -15,6 +15,7 @@ module "postgres_db_production" {
   subnet_ids = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
   db_allocated_storage = 100
   maintenance_window ="sun:10:00-sun:10:30"
+  backup_window = "00:01-00:31"
   storage_encrypted = true
   multi_az = true //only true if production deployment
   publicly_accessible = false
