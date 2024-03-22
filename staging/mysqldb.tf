@@ -43,7 +43,7 @@ resource "aws_db_instance" "housing-mysql-db" {
 
 resource "aws_db_instance" "housing-mysql-db-replica" {
   identifier                  = "housing-finance-db-${var.environment_name}-replica"
-  replicate_source_db         = "db-VGYMM6BPKHRNHRDUBSIQU4ZR6M" //aws_db_instance.housing-mysql-db.id
+  replicate_source_db         = aws_db_instance.housing-mysql-db.name
   instance_class              = "db.t2.micro" //this should be a more production appropriate instance in production
   allocated_storage           = 10
   storage_type                = "gp2" //ssd
