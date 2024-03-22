@@ -20,6 +20,7 @@ module "postgres_db_master" {
   publicly_accessible  = var.publicly_accessible
   project_name         = var.project_name
   backup_policy        = var.backup_policy
+  vpc_security_group_ids = ["sg-07d40f16ad18f1f60", "sg-01396d0029aa1c950"]
 }
 
 
