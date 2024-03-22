@@ -21,5 +21,5 @@ module "postgres_db_production" {
   publicly_accessible = false
   project_name = "housing finance"
   backup_policy = "Prod"
-  vpc_security_group_ids = ["sg-07d40f16ad18f1f60", "sg-01396d0029aa1c950"]
+  vpc_security_group_ids = ["sg-07d40f16ad18f1f60"]
 }
