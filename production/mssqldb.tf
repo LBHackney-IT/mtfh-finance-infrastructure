@@ -8,9 +8,9 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
 }
 
 # identifier for the Source database
-# data "aws_db_instance" "source_db" {
-#   db_instance_identifier = "${var.mssql-db-source}-${var.environment_name}-web"
-# }
+data "aws_db_instance" "source_db" {
+  db_instance_identifier = "housing-finance-sql-db-production"
+}
 
 # Snapshot1 - create a snapshot of the Source DB
 data "aws_db_snapshot" "db1_snapshot" {
