@@ -1,4 +1,3 @@
-
 # HFS Postgres Master database
 module "postgres_db_master" {
   source = "../modules/postgres"
@@ -8,9 +7,9 @@ module "postgres_db_master" {
   db_name              = data.aws_ssm_parameter.hfs_master_postgres_database.value
   db_engine            = var.db_engine
   db_engine_version    = var.db_engine_version
-  db_instance_class    = "db.t3.medium" # check production 
-  vpc_id               = "vpc-064521a7a4109ba31"
-  db_allocated_storage = 50 # production = 240
+  db_instance_class    = "db.t3.large" # check production 
+  vpc_id               = "vpc-0ce853ddb64e8fb3c"
+  db_allocated_storage = 240
   db_port              = var.db_port
   subnet_ids           = var.subnet_ids
   db_username          = data.aws_ssm_parameter.hfs_master_postgres_username.value
@@ -19,10 +18,11 @@ module "postgres_db_master" {
   multi_az             = var.multi_az
   enabled_cloudwatch_logs_exports = ["postgresql"]
   maintenance_window   = var.maintenance_window
-  backup_window        = "00:01-00:31"
+  backup_window        = "08:45-09:15"
   publicly_accessible  = var.publicly_accessible
   project_name         = var.project_name
-  vpc_security_group_ids = ["sg-0ce270bb666a7ad64"]
+  backup_policy        = var.backup_policy
+  vpc_security_group_ids = ["sg-07d40f16ad18f1f60", "sg-01396d0029aa1c950"]
 }
 
 
@@ -31,13 +31,18 @@ resource "aws_db_instance" "postgres-replica-01" {
   identifier          = "${var.db_identifier}-replica-db-01-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+  instance_class      = "db.t3.large"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-01-${var.environment_name}"
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy = "Prod"
   }
 
   lifecycle {
@@ -55,13 +60,18 @@ resource "aws_db_instance" "postgres-replica-02" {
   identifier          = "${var.db_identifier}-replica-db-02-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+  instance_class      = "db.t3.large"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-02-${var.environment_name}"
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy = "Prod"
   }
 
   lifecycle {
@@ -79,37 +89,18 @@ resource "aws_db_instance" "postgres-replica-03" {
   identifier          = "${var.db_identifier}-replica-db-03-${var.environment_name}"
   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
   depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+  instance_class      = "db.t3.large"
 
   tags = {
     Name              = "${var.db_identifier}-replica-db-03-${var.environment_name}"
     Environment       = var.environment_name
     terraform-managed = true
     project_name      = var.project_name
+    BackupPolicy      = "Prod"
   }
 
-  lifecycle {
-    prevent_destroy = true
-    ignore_changes = [
-      storage_encrypted,
-      allocated_storage,
-      deletion_protection
-    ]
-  }
-}
-
-# Replica 04 :: Accounts Information DB
-resource "aws_db_instance" "postgres-replica-04" {
-  identifier          = "${var.db_identifier}-replica-db-04-${var.environment_name}"
-  replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
-  depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
-
-  tags = {
-    Name              = "${var.db_identifier}-replica-db-04-${var.environment_name}"
-    Environment       = var.environment_name
-    terraform-managed = true
-    project_name      = var.project_name
+  tags_all = {
+    BackupPolicy = "Prod"
   }
 
   lifecycle {

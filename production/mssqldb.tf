@@ -7,22 +7,13 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
   }
 }
 
-# identifier for the Source database
-data "aws_db_instance" "source_db" {
-  db_instance_identifier = "${var.mssql-db-source}-${var.environment_name}-web"
-}
-
-# Snapshot1 - create a snapshot of the Source DB
-resource "aws_db_snapshot" "db1_snapshot" {
-  db_instance_identifier = data.aws_db_instance.source_db.id
-  db_snapshot_identifier = "${var.mssql-db-target}-snapshot"
-}
 
 # use Snapshot1 to create a database with EE instance
 resource "aws_db_instance" "mssql-ee" {
-  snapshot_identifier = aws_db_snapshot.db1_snapshot.id
+  snapshot_identifier = "housing-finance-sql-db-snapshot"
 
   allocated_storage       = 240
+  max_allocated_storage   = 1200
   engine                  = "sqlserver-ee"
   engine_version          = "15.00.4198.2.v1"
   instance_class          = "db.t3.xlarge"
@@ -45,6 +36,11 @@ resource "aws_db_instance" "mssql-ee" {
     Environment       = "${var.environment_name}"
     terraform-managed = true
     project_name      = "MTFH Finance"
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy      = "Prod"
   }
 
   lifecycle {
@@ -58,19 +54,26 @@ resource "aws_db_instance" "mssql-ee" {
 # create a read replica database from the EE instance
 resource "aws_db_instance" "db_ee_replica" {
   allocated_storage   = 45
+  max_allocated_storage = 1200
   instance_class      = "db.t3.xlarge"
+  apply_immediately = false
 
   #name
   identifier          = "${var.mssql-db-target}-${var.environment_name}-replica"
   skip_final_snapshot = true
 
-  replicate_source_db = aws_db_instance.mssql-ee.id
+  replicate_source_db = aws_db_instance.mssql-ee.identifier
 
   tags = {
     Name              = "${var.mssql-db-target}-${var.environment_name}-replica"
     Environment       = "${var.environment_name}"
     terraform-managed = true
     project_name      = "MTFH Finance"
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy      = "Prod"
   }
 
   lifecycle {

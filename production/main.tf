@@ -48,6 +48,16 @@ data "aws_ssm_parameter" "housing_finance_mssql_password" {
   name = "/housing-finance/production/mssql-password"
 }
 
+data "aws_ssm_parameter" "hfs_master_postgres_database" {
+  name = "/housing-finance/production/hfs-postgres-database"
+}
+data "aws_ssm_parameter" "hfs_master_postgres_username" {
+  name = "/housing-finance/production/hfs-postgres-username"
+}
+data "aws_ssm_parameter" "hfs_master_postgres_password" {
+  name = "/housing-finance/production/hfs-postgres-password"
+}
+
 resource "aws_security_group" "mtfh_finance_security_group" {
   name        = "mtfh-finance-allowdb-traffic-${var.environment_name}"
   description = "Allow traffic for the various database types"
@@ -85,7 +95,7 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-    ingress {
+  ingress {
     description      = "Allow traffic for income api"
     from_port        = 3000
     to_port          = 3000
@@ -93,7 +103,7 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-    ingress {
+  ingress {
     description      = "Allow traffic for manage arrears front end"
     from_port        = 3001
     to_port          = 3001
@@ -101,7 +111,18 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-
+  ingress {
+    description      = "Allow Postgres"
+    from_port        = 5432
+    to_port          = 5432
+    protocol         = "tcp"
+    security_groups  = []
+    self             = false
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+  }
+  
   egress {
     from_port        = 0
     to_port          = 0

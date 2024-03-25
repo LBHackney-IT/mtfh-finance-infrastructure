@@ -43,9 +43,24 @@ variable "storage_encrypted" {
 variable "multi_az" {
   type = string
 }
+variable "enabled_cloudwatch_logs_exports" {
+  type = list(string)
+  default = []
+}
 variable "publicly_accessible" {
   type = string
 }
 variable "project_name" {
+  type = string
+}
+variable "backup_policy" {
+  type = string
+  default = null
+}
+variable "vpc_security_group_ids" {
+  type = list(string)
+}
+
+variable "backup_window" {
   type = string
 }
