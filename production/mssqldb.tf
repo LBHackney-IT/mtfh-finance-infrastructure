@@ -36,7 +36,7 @@ resource "aws_db_instance" "mssql-ee" {
   publicly_accessible     = false
   backup_retention_period = 30
   storage_encrypted       = true
-  deletion_protection     = false
+  deletion_protection     = true
   apply_immediately       = false
   skip_final_snapshot     = true
 
@@ -48,7 +48,7 @@ resource "aws_db_instance" "mssql-ee" {
   }
 
   lifecycle {
-    prevent_destroy   = true
+    prevent_destroy   = false
     ignore_changes    = [
       storage_encrypted
     ]
