@@ -8,7 +8,6 @@ resource "aws_elasticache_subnet_group" "redis_subnets" {
 
 resource "aws_elasticache_replication_group" "redis_cache" {
   automatic_failover_enabled    = true
-  preferred_cache_cluster_azs   = ["eu-west-2a", "eu-west-2b"]
   replication_group_id          = "redis-finance-${var.environment_name}-1"
   description = "mtfh finance redis group"
   node_type             = "cache.t3.small"
