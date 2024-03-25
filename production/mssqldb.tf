@@ -23,6 +23,7 @@ resource "aws_db_instance" "mssql-ee" {
   snapshot_identifier = "housing-finance-sql-db-snapshot"
 
   allocated_storage       = 240
+  max_allocated_storage   = 1200
   engine                  = "sqlserver-ee"
   engine_version          = "15.00.4198.2.v1"
   instance_class          = "db.t3.xlarge"
@@ -45,6 +46,11 @@ resource "aws_db_instance" "mssql-ee" {
     Environment       = "${var.environment_name}"
     terraform-managed = true
     project_name      = "MTFH Finance"
+    BackupPolicy      = "Prod"
+  }
+
+  tags_all = {
+    BackupPolicy      = "Prod"
   }
 
   lifecycle {
