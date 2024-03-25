@@ -43,6 +43,10 @@ variable "storage_encrypted" {
 variable "multi_az" {
   type = string
 }
+variable "enabled_cloudwatch_logs_exports" {
+  type = list(string)
+  default = []
+}
 variable "publicly_accessible" {
   type = string
 }

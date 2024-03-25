@@ -17,6 +17,7 @@ module "postgres_db_master" {
   db_password          = data.aws_ssm_parameter.hfs_master_postgres_password.value
   storage_encrypted    = var.storage_encrypted
   multi_az             = var.multi_az
+  enabled_cloudwatch_logs_exports = ["postgresql"]
   maintenance_window   = var.maintenance_window
   backup_window        = "00:01-00:31"
   publicly_accessible  = var.publicly_accessible

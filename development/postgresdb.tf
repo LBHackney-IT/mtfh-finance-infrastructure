@@ -18,6 +18,7 @@ module "postgres_db_development" {
   backup_window = "00:01-00:31"
   storage_encrypted = false
   multi_az = false //only true if production deployment
+  enabled_cloudwatch_logs_exports = ["postgresql"]
   publicly_accessible = false
   project_name = "housing finance"
   vpc_security_group_ids = ["sg-0b1844c4c2d5096a2"] // mtfh-finance-allowdb-traffic-production	

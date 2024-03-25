@@ -38,7 +38,7 @@ resource "aws_db_instance" "lbh-db" {
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
 
-  enabled_cloudwatch_logs_exports = []
+  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
   apply_immediately   = false
   skip_final_snapshot = true
