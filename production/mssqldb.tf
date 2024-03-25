@@ -14,7 +14,7 @@ data "aws_db_instance" "source_db" {
 
 # Snapshot1 - create a snapshot of the Source DB
 data "aws_db_snapshot" "db1_snapshot" {
-  # db_instance_identifier = data.aws_db_instance.source_db.id
+  db_instance_identifier = data.aws_db_instance.source_db.id
   db_snapshot_identifier = "arn:aws:rds:eu-west-2:282997303675:snapshot:housing-finance-sql-prod-web-snapshot"
 }
 
