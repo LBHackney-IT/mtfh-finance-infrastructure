@@ -8,14 +8,14 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
 }
 
 # identifier for the Source database
-data "aws_db_instance" "source_db" {
-  db_instance_identifier = "${var.mssql-db-source}-${var.environment_name}-web"
-}
+# data "aws_db_instance" "source_db" {
+#   db_instance_identifier = "${var.mssql-db-source}-${var.environment_name}-web"
+# }
 
 # Snapshot1 - create a snapshot of the Source DB
-resource "aws_db_snapshot" "db1_snapshot" {
-  db_instance_identifier = data.aws_db_instance.source_db.id
-  db_snapshot_identifier = "${var.mssql-db-target}-snapshot"
+data "aws_db_snapshot" "db1_snapshot" {
+  # db_instance_identifier = data.aws_db_instance.source_db.id
+  db_snapshot_identifier = "arn:aws:rds:eu-west-2:282997303675:snapshot:housing-finance-sql-prod-web-snapshot"
 }
 
 # use Snapshot1 to create a database with EE instance
