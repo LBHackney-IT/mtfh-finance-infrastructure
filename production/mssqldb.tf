@@ -20,7 +20,7 @@ data "aws_db_snapshot" "db1_snapshot" {
 
 # use Snapshot1 to create a database with EE instance
 resource "aws_db_instance" "mssql-ee" {
-  snapshot_identifier = aws_db_snapshot.db1_snapshot.id
+  snapshot_identifier = data.aws_db_snapshot.db1_snapshot.id
 
   allocated_storage       = 240
   engine                  = "sqlserver-ee"
