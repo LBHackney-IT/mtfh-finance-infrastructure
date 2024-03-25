@@ -13,14 +13,14 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
 # }
 
 # Snapshot1 - create a snapshot of the Source DB
-data "aws_db_snapshot" "db1_snapshot" {
-  # db_instance_identifier = data.aws_db_instance.source_db.id
-  db_snapshot_identifier = "housing-finance-sql-db-snapshot"
-}
+# data "aws_db_snapshot" "db1_snapshot" {
+#   # db_instance_identifier = data.aws_db_instance.source_db.id
+#   db_snapshot_identifier = "housing-finance-sql-db-snapshot"
+# }
 
 # use Snapshot1 to create a database with EE instance
 resource "aws_db_instance" "mssql-ee" {
-  snapshot_identifier = data.aws_db_snapshot.db1_snapshot.id
+  snapshot_identifier = "housing-finance-sql-db-snapshot"
 
   allocated_storage       = 240
   engine                  = "sqlserver-ee"
