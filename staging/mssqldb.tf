@@ -22,7 +22,7 @@ resource "aws_db_snapshot" "db1_snapshot" {
 resource "aws_db_instance" "hfs-mssql-web" {
   snapshot_identifier = aws_db_snapshot.db1_snapshot.id
 
-  allocated_storage       = 40
+  allocated_storage       = 100
   engine                  = "sqlserver-web"
   engine_version          = "15.00.4073.23.v1"
   instance_class          = "db.t3.xlarge"
