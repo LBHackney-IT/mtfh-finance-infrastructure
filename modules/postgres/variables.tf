@@ -64,3 +64,7 @@ variable "vpc_security_group_ids" {
 variable "backup_window" {
   type = string
 }
+variable "final_snapshot_identifier" {
+  type = string
+  default = null
+}
