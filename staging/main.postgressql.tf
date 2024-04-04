@@ -2,7 +2,7 @@
 # HFS Postgres Master database
 module "postgres_db_master" {
   source = "../modules/postgres"
-  final_snapshot_identifier = "rds:housing-finance-postgres-master-db-staging-2024-04-04-00-15"
+  final_snapshot_identifier = "housing-finance-postgres-master-db-staging-2024-04-04-00-15"
   environment_name     = var.environment_name
   db_identifier        = "${var.db_identifier}-master"
   db_name              = data.aws_ssm_parameter.hfs_master_postgres_database.value
