@@ -99,26 +99,26 @@ resource "aws_db_instance" "postgres-replica-03" {
 }
 
 # Replica 04 :: Accounts Information DB
-resource "aws_db_instance" "postgres-replica-04" {
-  skip_final_snapshot = true
-  identifier          = "${var.db_identifier}-replica-db-04-${var.environment_name}"
-  replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
-  depends_on          = [module.postgres_db_master.instance_id]
-  instance_class      = "db.t3.medium"
+# resource "aws_db_instance" "postgres-replica-04" {
+#   skip_final_snapshot = true
+#   identifier          = "${var.db_identifier}-replica-db-04-${var.environment_name}"
+#   replicate_source_db = "${var.db_identifier}-master-db-${var.environment_name}"
+#   depends_on          = [module.postgres_db_master.instance_id]
+#   instance_class      = "db.t3.medium"
 
-  tags = {
-    Name              = "${var.db_identifier}-replica-db-04-${var.environment_name}"
-    Environment       = var.environment_name
-    terraform-managed = true
-    project_name      = var.project_name
-  }
+#   tags = {
+#     Name              = "${var.db_identifier}-replica-db-04-${var.environment_name}"
+#     Environment       = var.environment_name
+#     terraform-managed = true
+#     project_name      = var.project_name
+#   }
 
-  lifecycle {
-    prevent_destroy = false
-    ignore_changes = [
-      storage_encrypted,
-      allocated_storage,
-      deletion_protection
-    ]
-  }
-}
+#   lifecycle {
+#     prevent_destroy = false
+#     ignore_changes = [
+#       storage_encrypted,
+#       allocated_storage,
+#       deletion_protection
+#     ]
+#   }
+# }
