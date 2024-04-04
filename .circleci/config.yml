@@ -75,6 +75,25 @@ commands:
           command: |
             cd ./<<parameters.environment>>/
             terraform apply -auto-approve
+  terraform-import-state:
+    description: "Imports the state of the terraform configuration"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform get -update=true
+            terraform init
+          name: get and init
+      - run:
+          name: import
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform state import -auto-approve
 
 jobs:
   # Auth:
@@ -125,8 +144,35 @@ jobs:
     steps:
       - terraform-init-then-plan:
           environment: "production"
+  # Terraform state import:
+  terraform-import-state-development:
+    executor: docker-terraform
+    steps:
+      - terraform-import-state:
+          environment: "development"
+  terraform-import-state-staging:
+    executor: docker-terraform
+    steps:
+      - terraform-import-state:
+          environment: "staging"
+  terraform-import-state-production:
+    executor: docker-terraform
+    steps:
+      - terraform-import-state:
+          environment: "production"
 
 workflows:
+  import-state:
+    jobs:
+      - terraform-import-state-development
+      - terraform-import-state-staging
+      - permit-import-state-production:
+          type: approval
+          requires:
+            - terraform-import-state-staging
+      - terraform-import-state-production
+
+
   preview-staging-and-prod-from-feature-branch:
     jobs:
       - assume-role-staging:
