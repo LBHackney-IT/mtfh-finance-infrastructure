@@ -155,11 +155,11 @@ jobs:
     steps:
       - terraform-import-state:
           environment: "staging"
-  terraform-import-state-production:
-    executor: docker-terraform
-    steps:
-      - terraform-import-state:
-          environment: "production"
+  # terraform-import-state-production:
+  #   executor: docker-terraform
+  #   steps:
+  #     - terraform-import-state:
+  #         environment: "production"
 
 workflows:
   preview-staging-and-prod-from-feature-branch:
@@ -169,7 +169,9 @@ workflows:
           filters:
              branches:
                ignore: main
-      - terraform-import-state-staging
+      - terraform-import-state-staging:
+          requires:
+            - assume-role-staging
       - preview-terraform-staging-changes:
           requires:
             - assume-role-staging
@@ -191,10 +193,12 @@ workflows:
     jobs:
       - assume-role-development:
           context: api-assume-role-housing-development-context
-      - terraform-import-state-development
+      - terraform-import-state-development:
+          requires:
+            - assume-role-development
       - preview-terraform-development-changes:
           requires:
-              - assume-role-development
+              - terraform-import-state-development
       - permit-development-terraform-release:
           type: approval
           requires:
@@ -209,10 +213,12 @@ workflows:
           # filters:
           #    branches:
           #      only: main
-      - terraform-import-state-production
-      - preview-terraform-staging-changes:
+      - terraform-import-state-staging:
           requires:
             - assume-role-staging
+      - preview-terraform-staging-changes:
+          requires:
+            - terraform-import-state-staging
           # filters:
           #   branches:
           #     only: main
