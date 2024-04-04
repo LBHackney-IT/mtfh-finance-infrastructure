@@ -162,17 +162,6 @@ jobs:
           environment: "production"
 
 workflows:
-  import-state:
-    jobs:
-      - terraform-import-state-development
-      - terraform-import-state-staging
-      - permit-import-state-production:
-          type: approval
-          requires:
-            - terraform-import-state-staging
-      - terraform-import-state-production
-
-
   preview-staging-and-prod-from-feature-branch:
     jobs:
       - assume-role-staging:
@@ -180,6 +169,7 @@ workflows:
           filters:
              branches:
                ignore: main
+      - terraform-import-state-staging
       - preview-terraform-staging-changes:
           requires:
             - assume-role-staging
@@ -201,6 +191,7 @@ workflows:
     jobs:
       - assume-role-development:
           context: api-assume-role-housing-development-context
+      - terraform-import-state-development
       - preview-terraform-development-changes:
           requires:
               - assume-role-development
@@ -218,6 +209,7 @@ workflows:
           # filters:
           #    branches:
           #      only: main
+      - terraform-import-state-production
       - preview-terraform-staging-changes:
           requires:
             - assume-role-staging
