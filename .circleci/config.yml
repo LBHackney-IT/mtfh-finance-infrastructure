@@ -201,7 +201,6 @@ workflows:
           type: approval
           requires:
             - preview-terraform-production-changes
-            - terraform-apply-staging
           filters:
             branches:
               only: main
