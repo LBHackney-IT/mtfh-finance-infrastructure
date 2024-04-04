@@ -169,60 +169,60 @@ workflows:
     jobs:
       - assume-role-staging:
           context: api-assume-role-housing-staging-context
-          filters:
-             branches:
-               only: main
+          # filters:
+          #    branches:
+          #      only: main
       - preview-terraform-staging-changes:
           requires:
             - assume-role-staging
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
       - permit-staging-terraform-release:
           type: approval
           requires:
             - preview-terraform-staging-changes
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
       - terraform-init-and-apply-to-staging:
           requires:
             - permit-staging-terraform-release
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
       - start-production-release:
           # This approval is needed to make assume role prod trigger
           # when we actually need it, otherwise the temp creds will expire
           type: approval
           requires:
             - terraform-init-and-apply-to-staging
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
       - assume-role-production:
           context: api-assume-role-housing-production-context
           requires:
               - start-production-release
-          filters:
-             branches:
-               only: main
+          # filters:
+          #    branches:
+          #      only: main
       - preview-terraform-production-changes:
           requires:
             - assume-role-production
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
       - permit-production-terraform-release:
           type: approval
           requires:
             - preview-terraform-production-changes
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
       - terraform-init-and-apply-to-production:
           requires:
             - permit-production-terraform-release
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
