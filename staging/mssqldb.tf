@@ -7,21 +7,8 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
   }
 }
 
-# identifier for the Source database
-data "aws_db_instance" "source_db" {
-  db_instance_identifier = "${var.mssql-db-source}-${var.environment_name}"
-}
-
-# Snapshot1 - create a snapshot of the Source DB
-resource "aws_db_snapshot" "db1_snapshot" {
-  db_instance_identifier = data.aws_db_instance.source_db.id
-  db_snapshot_identifier = "${var.mssql-db-target}-snapshot"
-}
-
 # use Snapshot1 to create a database with EE instance
 resource "aws_db_instance" "hfs-mssql-web" {
-  snapshot_identifier = aws_db_snapshot.db1_snapshot.id
-
   allocated_storage       = 100
   engine                  = "sqlserver-web"
   engine_version          = "15.00.4073.23.v1"
