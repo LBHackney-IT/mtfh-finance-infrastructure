@@ -28,6 +28,5 @@ module "postgres_db_master" {
   backup_window        = "23:00-23:30"
   publicly_accessible  = false
   project_name         = "Housing-Finance PostgreSQL master database"
-  backup_policy        = "Dev"
   vpc_security_group_ids = ["sg-05ce2e123157570b5"] # mtfh-finance-allow-traffic-development
 }
