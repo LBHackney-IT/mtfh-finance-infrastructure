@@ -1,6 +1,3 @@
-data "aws_ssm_parameter" "db_database" {
-  name = "/housing-finance/development/db-database"
-}
 data "aws_ssm_parameter" "db_username" {
   name = "/housing-finance/development/db-username"
 }
@@ -16,8 +13,8 @@ module "postgres_db_master" {
   db_engine            = "postgres"
   db_engine_version    = "16.1"
   db_instance_class    = "db.t3.xlarge"
+  db_name              = "hfs-postgres-master"
   # TODO: Replace these with a parameter group
-  db_name              = data.aws_ssm_parameter.db_database.value
   db_username          = data.aws_ssm_parameter.db_username.value
   db_password          = data.aws_ssm_parameter.db_password.value
   vpc_id               = "vpc-0d15f152935c8716f"
