@@ -9,7 +9,7 @@ data "aws_ssm_parameter" "db_password" {
 module "postgres_db_master" {
   source               = "../modules/postgres"
   environment_name     = var.environment_name
-  db_identifier        = "housing-finance-postgres-master"
+  db_identifier        = "housing-finance-master"
   db_engine            = "postgres"
   db_engine_version    = "16.1"
   db_instance_class    = "db.t3.xlarge"
