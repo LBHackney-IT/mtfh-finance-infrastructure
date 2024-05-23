@@ -24,7 +24,7 @@ module "postgres_db_master" {
   storage_encrypted    = true
   multi_az             = false
   enabled_cloudwatch_logs_exports = ["postgresql"]
-  maintenance_window   = "tue:01:00-tue:03:00"
+  maintenance_window   = "sat:01:00-sat:03:00"
   backup_window        = "08:45-09:15"
   publicly_accessible  = false
   project_name         = "Housing-Finance PostgreSQL master database"
