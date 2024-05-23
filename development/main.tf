@@ -59,10 +59,10 @@ resource "aws_security_group" "mtfh_finance_security_group" {
   }
 }
 
-module "civicapay_cashfile_sync" {
-  source                    = "../civicapay_cashfile_sync_module"
-  environment               = var.environment_name
-  remote_lambda_role_arn    = var.remote_lambda_role_arn
-  statemachine_lambda_name  = var.statemachine_lambda_name
-  statemachine_lambda_role  = var.statemachine_lambda_role
-}
+# module "civicapay_cashfile_sync" {
+#   source                    = "../civicapay_cashfile_sync_module"
+#   environment               = var.environment_name
+#   remote_lambda_role_arn    = var.remote_lambda_role_arn
+#   statemachine_lambda_name  = var.statemachine_lambda_name
+#   statemachine_lambda_role  = var.statemachine_lambda_role
+# }
