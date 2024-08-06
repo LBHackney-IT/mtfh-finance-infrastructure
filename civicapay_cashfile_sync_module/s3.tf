@@ -7,12 +7,12 @@ resource "aws_s3_bucket" "sftpbucket" {
 }
 
 # Create the /cashfiles folder in the S3 bucket
-resource "aws_s3_object" "s3_folder" {
-  depends_on   = [aws_s3_bucket.sftpbucket]
-  bucket       = aws_s3_bucket.sftpbucket.id
-  key          = "${var.bucket_folder_name}/"
-  content_type = local.s3_content_type
-}
+#resource "aws_s3_object" "s3_folder" {
+#  depends_on   = [aws_s3_bucket.sftpbucket]
+#  bucket       = aws_s3_bucket.sftpbucket.id
+#  key          = "${var.bucket_folder_name}/"
+#  content_type = local.s3_content_type
+#}
 
 # Add a lifecyle config to remove files older than 30 days
 resource "aws_s3_bucket_lifecycle_configuration" "lc" {
