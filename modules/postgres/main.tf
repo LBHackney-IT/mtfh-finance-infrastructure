@@ -19,6 +19,7 @@ resource "aws_db_instance" "lbh-db" {
   identifier                  = "${var.db_identifier}-db-${var.environment_name}"
   engine                      = "postgres"
   engine_version              = var.db_engine_version # Use an appropriate db version for production instances
+  parameter_group_name        = var.db_parameter_group_name
   instance_class              = var.db_instance_class # Use an appropriate instance class for production instances
   allocated_storage           = var.db_allocated_storage
   storage_type                = "gp2" //ssd
