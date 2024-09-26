@@ -21,8 +21,8 @@
             },
             "Action": "s3:*",
             "Resource": [
-                "arn:aws:s3:::civica-sftp-cashfile-bucket-production",
-                "arn:aws:s3:::civica-sftp-cashfile-bucket-production/*"
+                "${s3-bucket-arn}",
+                "${s3-bucket-arn}/*"
             ],
             "Condition": {
                 "Bool": {
