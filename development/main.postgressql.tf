@@ -14,7 +14,7 @@ module "postgres_db_master" {
   environment_name     = var.environment_name
   db_identifier        = "housing-finance-master"
   db_engine            = "postgres"
-  db_engine_version    = "16.1"
+  db_engine_version    = "16.3"
   db_instance_class    = "db.t3.xlarge"
   db_name              = data.aws_ssm_parameter.hfs_master_postgres_database.value
   # TODO: Replace these with a parameter group
