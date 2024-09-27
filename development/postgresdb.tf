@@ -7,6 +7,7 @@ module "postgres_db_development" {
   vpc_id =  "vpc-0d15f152935c8716f"
   db_engine = "postgres"
   db_engine_version = "16.3"
+  db_parameter_group_name = "postgres-16"
   db_identifier = "mtfh-finance-pgdb"
   db_instance_class = "db.t3.micro"
   db_name = data.aws_ssm_parameter.housing_finance_postgres_database.value
@@ -22,5 +23,5 @@ module "postgres_db_development" {
   enabled_cloudwatch_logs_exports = ["postgresql"]
   publicly_accessible = false
   project_name = "housing finance"
-  vpc_security_group_ids = ["sg-0b1844c4c2d5096a2"] // mtfh-finance-allowdb-traffic-production	
+  vpc_security_group_ids = ["sg-0b1844c4c2d5096a2"] // mtfh-finance-allowdb-traffic-production
 }

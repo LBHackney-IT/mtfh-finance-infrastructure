@@ -22,6 +22,11 @@ variable "db_engine" {
 variable "db_engine_version" {
   type = string
 }
+variable "db_parameter_group_name" {
+  description = "Allows attach a specific db parameter group by its name."
+  type = string
+  default = null
+}
 variable "db_instance_class" {
   type = string
 }
