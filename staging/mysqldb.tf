@@ -11,7 +11,7 @@ resource "aws_db_instance" "housing-mysql-db" {
   identifier                  = "housing-finance-db-${var.environment_name}"
   engine                      = "mysql"
   engine_version              = "8.0.35"
-  instance_class              = "db.t2.micro" //this should be a more production appropriate instance in production
+  instance_class              = "db.t3.micro" //this should be a more production appropriate instance in production
   allocated_storage           = 10
   storage_type                = "gp2" //ssd
   port                        = 3306
@@ -44,7 +44,7 @@ resource "aws_db_instance" "housing-mysql-db" {
 resource "aws_db_instance" "housing-mysql-db-replica" {
   identifier                  = "housing-finance-db-${var.environment_name}-replica"
   replicate_source_db         = aws_db_instance.housing-mysql-db.identifier
-  instance_class              = "db.t2.micro" //this should be a more production appropriate instance in production
+  instance_class              = "db.t3.micro" //this should be a more production appropriate instance in production
   allocated_storage           = 10
   storage_type                = "gp2" //ssd
   port                        = 3306
