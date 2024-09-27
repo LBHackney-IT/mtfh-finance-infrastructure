@@ -37,6 +37,7 @@ resource "aws_db_instance" "lbh-db" {
   multi_az                    = var.multi_az
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
+  parameter_group_name        = "postgres16"
 
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
