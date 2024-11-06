@@ -78,48 +78,18 @@ commands:
 
 jobs:
   # Auth:
-  assume-role-development:
+  assume-role-disaster-recovery:
     executor: docker-python
     steps:
       - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_DEVELOPMENT
-  assume-role-staging:
-    executor: docker-python
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_STAGING
-  assume-role-production:
-    executor: docker-python
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_PRODUCTION
+          aws-account: $AWS_ACCOUNT_DISASTER_RECOVERY
   # Infrastructure changes preview:
-  preview-terraform-development-changes:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-plan:
-          environment: "development"
-  preview-terraform-staging-changes:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-plan:
-          environment: "staging"
   preview-terraform-production-changes:
     executor: docker-terraform
     steps:
       - terraform-init-then-plan:
           environment: "production"
   # Infrastructure deployment:
-  terraform-init-and-apply-to-development:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-apply:
-          environment: "development"
-  terraform-init-and-apply-to-staging:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-apply:
-          environment: "staging"
   terraform-init-and-apply-to-production:
     executor: docker-terraform
     steps:
@@ -127,102 +97,31 @@ jobs:
           environment: "production"
 
 workflows:
-  preview-staging-and-prod-from-feature-branch:
+  check-and-deploy-disaster-recovery:
     jobs:
-      - assume-role-staging:
-          context: api-assume-role-housing-staging-context
+      - assume-role-disaster-recovery:
+          context: api-assume-role-disaster-recovery-context
           filters:
              branches:
-               ignore: main
-      - preview-terraform-staging-changes:
-          requires:
-            - assume-role-staging
-          filters:
-            branches:
-              ignore: main
-      - assume-role-production:
-          context: api-assume-role-housing-production-context
-          filters:
-             branches:
-               ignore: main
+               only: dr-testing
       - preview-terraform-production-changes:
           requires:
             - assume-role-production
           filters:
             branches:
-              ignore: main
-  terraform-apply-development:
-    jobs:
-      - assume-role-development:
-          context: api-assume-role-housing-development-context
-      - preview-terraform-development-changes:
-          requires:
-              - assume-role-development
-      - permit-development-terraform-release:
-          type: approval
-          requires:
-            - preview-terraform-development-changes
-      - terraform-init-and-apply-to-development:
-          requires:
-            - permit-development-terraform-release
-  terraform-apply-staging-and-production:
-    jobs:
-      - assume-role-staging:
-          context: api-assume-role-housing-staging-context
-          filters:
-             branches:
-               only: main
-      - preview-terraform-staging-changes:
-          requires:
-            - assume-role-staging
-          filters:
-            branches:
-              only: main
-      - permit-staging-terraform-release:
-          type: approval
-          requires:
-            - preview-terraform-staging-changes
-          filters:
-            branches:
-              only: main
-      - terraform-init-and-apply-to-staging:
-          requires:
-            - permit-staging-terraform-release
-          filters:
-            branches:
-              only: main
-      - start-production-release:
+              only: dr-testing
+      - permit-terraform-release:
           # This approval is needed to make assume role prod trigger
           # when we actually need it, otherwise the temp creds will expire
-          type: approval
-          requires:
-            - terraform-init-and-apply-to-staging
-          filters:
-            branches:
-              only: main
-      - assume-role-production:
-          context: api-assume-role-housing-production-context
-          requires:
-              - start-production-release
-          filters:
-             branches:
-               only: main
-      - preview-terraform-production-changes:
-          requires:
-            - assume-role-production
-          filters:
-            branches:
-              only: main
-      - permit-production-terraform-release:
           type: approval
           requires:
             - preview-terraform-production-changes
           filters:
             branches:
-              only: main
+              only: dr-testing
       - terraform-init-and-apply-to-production:
           requires:
-            - permit-production-terraform-release
+            - permit-terraform-release
           filters:
             branches:
-              only: main
+              only: dr-testing
