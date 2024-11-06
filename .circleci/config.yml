@@ -106,7 +106,7 @@ workflows:
                only: dr-testing
       - preview-terraform-production-changes:
           requires:
-            - assume-role-production
+            - assume-role-disaster-recovery
           filters:
             branches:
               only: dr-testing
