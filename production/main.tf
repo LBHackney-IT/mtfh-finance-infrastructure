@@ -61,7 +61,7 @@ terraform {
 resource "aws_security_group" "mtfh_finance_security_group" {
   name        = "mtfh-finance-allowdb-traffic-${var.environment_name}"
   description = "Allow traffic for the various database types"
-  vpc_id      = "vpc-0ce853ddb64e8fb3c"
+  vpc_id      = "vpc-006989d0b2bb070d9"
 
   ingress {
     description      = "Allow MySql"
