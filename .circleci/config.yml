@@ -93,7 +93,7 @@ jobs:
   terraform-init-and-apply-to-production:
     executor: docker-terraform
     steps:
-      - terraform-init-then-applyg:
+      - terraform-init-then-apply:
           environment: "production"
 
 workflows:
