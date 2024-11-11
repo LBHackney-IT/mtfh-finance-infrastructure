@@ -41,12 +41,12 @@ terraform {
 # data "aws_ssm_parameter" "housing_finance_mysql_password" {
 #   name = "/housing-finance/production/mysql-password"
 # }
-# data "aws_ssm_parameter" "housing_finance_mssql_username" {
-#   name = "/housing-finance/production/mssql-username"
-# }
-# data "aws_ssm_parameter" "housing_finance_mssql_password" {
-#   name = "/housing-finance/production/mssql-password"
-# }
+ data "aws_ssm_parameter" "housing_finance_mssql_username" {
+   name = "/housing-finance/production/mssql-username"
+ }
+ data "aws_ssm_parameter" "housing_finance_mssql_password" {
+   name = "/housing-finance/production/mssql-password"
+ }
 # 
 # data "aws_ssm_parameter" "hfs_master_postgres_database" {
 #   name = "/housing-finance/production/hfs-postgres-database"
