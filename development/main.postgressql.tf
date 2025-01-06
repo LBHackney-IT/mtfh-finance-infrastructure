@@ -27,8 +27,8 @@ module "postgres_db_master" {
   storage_encrypted    = true
   multi_az             = false
   enabled_cloudwatch_logs_exports = ["postgresql"]
-  maintenance_window   = "sat:01:00-sat:03:00"
-  backup_window        = "23:00-23:30"
+  maintenance_window   = "sun:10:00-sun:12:00"
+  backup_window        = ""
   publicly_accessible  = false
   project_name         = "Housing-Finance PostgreSQL master database"
   vpc_security_group_ids = ["sg-05ce2e123157570b5"] # mtfh-finance-allow-traffic-development
