@@ -66,6 +66,8 @@ resource "aws_db_instance" "db_ee_replica" {
 
   replicate_source_db = aws_db_instance.mssql-ee.identifier
 
+  maintenance_window      = "Sun:10:00-Sun:12:00"
+
   tags = {
     Name              = "${var.mssql-db-target}-${var.environment_name}-replica"
     Environment       = "${var.environment_name}"
