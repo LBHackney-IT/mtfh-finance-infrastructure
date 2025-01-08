@@ -31,6 +31,8 @@ resource "aws_db_instance" "mssql-ee" {
   apply_immediately       = false
   skip_final_snapshot     = true
 
+  maintenance_window      = "Sun:10:00-Sun:12:00"
+
   tags = {
     Name              = "${var.mssql-db-target}-${var.environment_name}"
     Environment       = "${var.environment_name}"
