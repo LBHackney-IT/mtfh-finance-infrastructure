@@ -10,8 +10,6 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
 
 # use Snapshot1 to create a database with EE instance
 resource "aws_db_instance" "mssql-ee" {
-  snapshot_identifier = "housing-finance-sql-db-snapshot"
-
   allocated_storage       = 240
   max_allocated_storage   = 1200
   engine                  = "sqlserver-ee"
