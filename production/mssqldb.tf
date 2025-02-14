@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
 
 resource "aws_db_instance" "mssql-ee" {
   allocated_storage       = 1000
-  max_allocated_storage   = 1200
+  max_allocated_storage   = 1500
   engine                  = "sqlserver-ee"
   engine_version          = "15.00.4198.2.v1"
   instance_class          = "db.t3.xlarge"
@@ -27,6 +27,7 @@ resource "aws_db_instance" "mssql-ee" {
   deletion_protection     = true
   apply_immediately       = false
   skip_final_snapshot     = true
+  performance_insights_enabled = true
 
   maintenance_window      = "Sun:10:00-Sun:12:00"
   backup_window           = "22:30-23:30"
