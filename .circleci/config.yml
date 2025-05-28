@@ -166,6 +166,18 @@ workflows:
           filters:
             branches:
               ignore: main
+      - assume-role-pre-production:
+          context: api-assume-role-housing-pre-production-context
+          filters:
+            branches:
+              ignore: main
+      - preview-terraform-pre-production-changes:
+          requires:
+            - assume-role-pre-production
+          filters:
+            branches:
+              ignore: main
+      
   terraform-apply-development:
     jobs:
       - assume-role-development:
