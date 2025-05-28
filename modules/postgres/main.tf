@@ -45,14 +45,16 @@ resource "aws_db_instance" "lbh-db" {
   skip_final_snapshot = true
   publicly_accessible = var.publicly_accessible
 
-  tags = {
-    Name              = "${var.db_name}-db-${var.environment_name}"
-    Environment       = var.environment_name
-    terraform-managed = true
-    project_name      = var.project_name
-    BackupPolicy      = var.backup_policy
-  }
-
+  tags = merge(
+    var.additional_tags,
+    {
+      Name              = "${var.db_name}-db-${var.environment_name}"
+      Environment       = var.environment_name
+      terraform-managed = true
+      project_name      = var.project_name
+      BackupPolicy      = var.backup_policy
+    }
+  )
   tags_all = {
     BackupPolicy = var.backup_policy
   }

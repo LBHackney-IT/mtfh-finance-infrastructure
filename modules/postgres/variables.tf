@@ -24,8 +24,8 @@ variable "db_engine_version" {
 }
 variable "db_parameter_group_name" {
   description = "Allows attach a specific db parameter group by its name."
-  type = string
-  default = null
+  type        = string
+  default     = null
 }
 variable "db_instance_class" {
   type = string
@@ -49,7 +49,7 @@ variable "multi_az" {
   type = string
 }
 variable "enabled_cloudwatch_logs_exports" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 variable "publicly_accessible" {
@@ -59,7 +59,7 @@ variable "project_name" {
   type = string
 }
 variable "backup_policy" {
-  type = string
+  type    = string
   default = null
 }
 variable "vpc_security_group_ids" {
@@ -68,4 +68,10 @@ variable "vpc_security_group_ids" {
 
 variable "backup_window" {
   type = string
+}
+
+variable "additional_tags" {
+  description = "Additional tags to be added to the RDS instance"
+  type        = map(any)
+  default     = {}
 }

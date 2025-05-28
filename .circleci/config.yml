@@ -93,6 +93,11 @@ jobs:
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
+  assume-role-pre-production:
+    executor: docker-python
+    steps:
+      - assume-role-and-persist-workspace:
+          aws-account: $AWS_ACCOUNT_PRE_PRODUCTION
   # Infrastructure changes preview:
   preview-terraform-development-changes:
     executor: docker-terraform
@@ -109,6 +114,11 @@ jobs:
     steps:
       - terraform-init-then-plan:
           environment: "production"
+  preview-terraform-pre-production-changes:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-plan:
+          environment: "pre-production"
   # Infrastructure deployment:
   terraform-init-and-apply-to-development:
     executor: docker-terraform
@@ -125,6 +135,11 @@ jobs:
     steps:
       - terraform-init-then-apply:
           environment: "production"
+  terraform-init-and-apply-to-pre-production:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-apply:
+          environment: "pre-production"
 
 workflows:
   preview-staging-and-prod-from-feature-branch:
@@ -226,3 +241,25 @@ workflows:
           filters:
             branches:
               only: main
+
+  terraform-apply-pre-production:
+    jobs:
+      - permit-pre-production-terraform-workflow:
+          type: approval
+          filters:
+            branches:
+              only: main
+      - assume-role-pre-production:
+          context: api-assume-role-housing-pre-production-context
+          requires:
+            - permit-pre-production-terraform-workflow
+      - preview-terraform-pre-production-changes:
+          requires:
+            - assume-role-pre-production
+      - permit-pre-production-terraform-deployment:
+          type: approval
+          requires:
+            - preview-terraform-pre-production-changes
+      - terraform-init-and-apply-to-pre-production:
+          requires:
+            - permit-pre-production-terraform-deployment
