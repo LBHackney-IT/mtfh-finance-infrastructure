@@ -11,7 +11,7 @@ module "postgres_db_pre_production" {
   vpc_id                          = "vpc-062a957b99c8b12e6"
   db_engine                       = "postgres"
   db_engine_version               = "16.3"
-  db_parameter_group_name         = "postgres16"
+  db_parameter_group_name         = "default.postgres16"
   db_identifier                   = "mtfh-finance-pgdb"
   db_instance_class               = "db.t3.micro"
   db_name                         = data.aws_ssm_parameter.housing_finance_postgres_database.value
