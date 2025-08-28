@@ -6,7 +6,7 @@ module "postgres_db_production" {
   environment_name = "production"
   vpc_id =  "vpc-0ce853ddb64e8fb3c"
   db_engine = "postgres"
-  db_engine_version = "16.3"
+  db_engine_version = "16.8"
   db_parameter_group_name = "postgres16"
   db_identifier = "mtfh-finance-pgdb"
   db_instance_class = "db.t3.large"
