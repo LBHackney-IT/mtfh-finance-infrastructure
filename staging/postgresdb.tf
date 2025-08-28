@@ -6,7 +6,7 @@ module "postgres_db_staging" {
   environment_name = "staging"
   vpc_id =  "vpc-064521a7a4109ba31"
   db_engine = "postgres"
-  db_engine_version = "16.3"
+  db_engine_version = "16.8"
   db_parameter_group_name = "postgres16"
   db_identifier = "mtfh-finance-pgdb"
   db_instance_class = "db.t3.micro"

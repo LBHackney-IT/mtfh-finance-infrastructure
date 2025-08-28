@@ -10,7 +10,7 @@ module "postgres_db_pre_production" {
   environment_name                = var.environment_name
   vpc_id                          = "vpc-062a957b99c8b12e6"
   db_engine                       = "postgres"
-  db_engine_version               = "16.3"
+  db_engine_version               = "16.8"
   db_parameter_group_name         = "default.postgres16"
   db_identifier                   = "mtfh-finance-pgdb"
   db_instance_class               = "db.t3.micro"

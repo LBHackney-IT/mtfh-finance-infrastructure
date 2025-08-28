@@ -6,7 +6,7 @@ module "postgres_db_development" {
   environment_name = "development"
   vpc_id =  "vpc-0d15f152935c8716f"
   db_engine = "postgres"
-  db_engine_version = "16.3"
+  db_engine_version = "16.8"
   db_parameter_group_name = "postgres16"
   db_identifier = "mtfh-finance-pgdb"
   db_instance_class = "db.t3.micro"
