@@ -77,11 +77,6 @@ resource "aws_db_instance" "db_ee_replica" {
     Backup            = false
   }
 
-  tags_all = {
-    BackupPolicy      = "Prod"
-    Backup            = false
-  }
-
   lifecycle {
     prevent_destroy   = true
     ignore_changes    = [
