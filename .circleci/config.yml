@@ -253,25 +253,3 @@ workflows:
           filters:
             branches:
               only: main
-
-  terraform-apply-pre-production:
-    jobs:
-      - permit-pre-production-terraform-workflow:
-          type: approval
-          filters:
-            branches:
-              only: main
-      - assume-role-pre-production:
-          context: api-assume-role-housing-pre-production-context
-          requires:
-            - permit-pre-production-terraform-workflow
-      - preview-terraform-pre-production-changes:
-          requires:
-            - assume-role-pre-production
-      - permit-pre-production-terraform-deployment:
-          type: approval
-          requires:
-            - preview-terraform-pre-production-changes
-      - terraform-init-and-apply-to-pre-production:
-          requires:
-            - permit-pre-production-terraform-deployment
