@@ -10,7 +10,7 @@ resource "aws_db_subnet_group" "mssql_db_subnets" {
 
 resource "aws_db_instance" "mssql-ee" {
   allocated_storage       = 1000
-  max_allocated_storage   = 3000
+  max_allocated_storage   = 0
   engine                  = "sqlserver-ee"
   engine_version          = "15.00.4198.2.v1"
   instance_class          = "db.t3.xlarge"
