@@ -42,10 +42,6 @@ resource "aws_db_instance" "mssql-ee" {
     BackupPolicy      = "Prod"
   }
 
-  tags_all = {
-    BackupPolicy      = "Prod"
-  }
-
   lifecycle {
     prevent_destroy   = true
     ignore_changes    = [
