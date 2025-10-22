@@ -27,7 +27,7 @@ resource "aws_db_instance" "mssql-ee" {
   deletion_protection     = true
   apply_immediately       = false
   skip_final_snapshot     = true
-  performance_insights_enabled = true
+  performance_insights_enabled = false
 
   auto_minor_version_upgrade  = true
   maintenance_window          = "Sun:10:00-Sun:12:00"
