@@ -29,6 +29,7 @@ resource "aws_db_instance" "mssql-ee" {
   skip_final_snapshot     = true
   performance_insights_enabled = false
 
+  copy_tags_to_snapshot       = true
   auto_minor_version_upgrade  = true
   maintenance_window          = "Sun:10:00-Sun:12:00"
   backup_window               = "22:30-23:30"
