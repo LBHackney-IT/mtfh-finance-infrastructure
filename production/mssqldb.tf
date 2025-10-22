@@ -74,10 +74,12 @@ resource "aws_db_instance" "db_ee_replica" {
     terraform-managed = true
     project_name      = "MTFH Finance"
     BackupPolicy      = "Prod"
+    Backup            = false
   }
 
   tags_all = {
     BackupPolicy      = "Prod"
+    Backup            = false
   }
 
   lifecycle {
