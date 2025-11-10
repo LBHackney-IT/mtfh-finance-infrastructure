@@ -1,11 +1,11 @@
 # MySQL Database Setup
-resource "aws_db_subnet_group" "db_subnets" {
-  name       = "housing-finance-db-subnet-${var.environment_name}"
-  subnet_ids = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+# resource "aws_db_subnet_group" "db_subnets" {
+#   name       = "housing-finance-db-subnet-${var.environment_name}"
+#   subnet_ids = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 # resource "aws_db_instance" "housing-mysql-db" {
 #   identifier                  = "housing-finance-db-${var.environment_name}"
