@@ -48,7 +48,6 @@ commands:
             cd ./<<parameters.environment>>/
             terraform get -update=true
             terraform init
-          name: get and init
       - run:
           name: plan root-infrastructure
           command: |
@@ -60,7 +59,6 @@ commands:
             cd ./hfs-nightly-charges/production/
             terraform get -update=true
             terraform init
-          name: get and init
       - run:
           name: plan
           command: |
