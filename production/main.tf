@@ -19,57 +19,57 @@ terraform {
   }
 }
 
-data "aws_ssm_parameter" "housing_finance_postgres_database" {
-  name = "/housing-finance/production/postgres-database"
-}
-data "aws_ssm_parameter" "housing_finance_postgres_port" {
-  name = "/housing-finance/production/postgres-port"
-}
-data "aws_ssm_parameter" "housing_finance_postgres_username" {
-  name = "/housing-finance/production/postgres-username"
-}
-data "aws_ssm_parameter" "housing_finance_postgres_password" {
-  name = "/housing-finance/production/postgres-password"
-}
+# data "aws_ssm_parameter" "housing_finance_postgres_database" {
+#   name = "/housing-finance/production/postgres-database"
+# }
+# data "aws_ssm_parameter" "housing_finance_postgres_port" {
+#   name = "/housing-finance/production/postgres-port"
+# }
+# data "aws_ssm_parameter" "housing_finance_postgres_username" {
+#   name = "/housing-finance/production/postgres-username"
+# }
+# data "aws_ssm_parameter" "housing_finance_postgres_password" {
+#   name = "/housing-finance/production/postgres-password"
+# }
 
-data "aws_ssm_parameter" "housing_finance_mysql_database" {
-  name = "/housing-finance/production/mysql-database"
-}
-data "aws_ssm_parameter" "housing_finance_mysql_username" {
-  name = "/housing-finance/production/mysql-username"
-}
-data "aws_ssm_parameter" "housing_finance_mysql_password" {
-  name = "/housing-finance/production/mysql-password"
-}
-data "aws_ssm_parameter" "housing_finance_mssql_username" {
-  name = "/housing-finance/production/mssql-username"
-}
-data "aws_ssm_parameter" "housing_finance_mssql_password" {
-  name = "/housing-finance/production/mssql-password"
-}
+# data "aws_ssm_parameter" "housing_finance_mysql_database" {
+#   name = "/housing-finance/production/mysql-database"
+# }
+# data "aws_ssm_parameter" "housing_finance_mysql_username" {
+#   name = "/housing-finance/production/mysql-username"
+# }
+# data "aws_ssm_parameter" "housing_finance_mysql_password" {
+#   name = "/housing-finance/production/mysql-password"
+# }
+# data "aws_ssm_parameter" "housing_finance_mssql_username" {
+#   name = "/housing-finance/production/mssql-username"
+# }
+# data "aws_ssm_parameter" "housing_finance_mssql_password" {
+#   name = "/housing-finance/production/mssql-password"
+# }
 
-data "aws_ssm_parameter" "hfs_master_postgres_database" {
-  name = "/housing-finance/production/hfs-postgres-database"
-}
-data "aws_ssm_parameter" "hfs_master_postgres_username" {
-  name = "/housing-finance/production/hfs-postgres-username"
-}
-data "aws_ssm_parameter" "hfs_master_postgres_password" {
-  name = "/housing-finance/production/hfs-postgres-password"
-}
+# data "aws_ssm_parameter" "hfs_master_postgres_database" {
+#   name = "/housing-finance/production/hfs-postgres-database"
+# }
+# data "aws_ssm_parameter" "hfs_master_postgres_username" {
+#   name = "/housing-finance/production/hfs-postgres-username"
+# }
+# data "aws_ssm_parameter" "hfs_master_postgres_password" {
+#   name = "/housing-finance/production/hfs-postgres-password"
+# }
 
 resource "aws_security_group" "mtfh_finance_security_group" {
   name        = "mtfh-finance-allowdb-traffic-${var.environment_name}"
   description = "Allow traffic for the various database types"
   vpc_id      = "vpc-0ce853ddb64e8fb3c"
 
-  ingress {
-    description      = "Allow MySql"
-    from_port        = 3306
-    to_port          = 3306
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   description      = "Allow MySql"
+  #   from_port        = 3306
+  #   to_port          = 3306
+  #   protocol         = "tcp"
+  #   cidr_blocks      = ["0.0.0.0/0"]
+  # }
 
   ingress {
     description      = "Allow MsSql"
@@ -79,13 +79,13 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description      = "Allow Redis"
-    from_port        = 6379
-    to_port          = 6379
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   description      = "Allow Redis"
+  #   from_port        = 6379
+  #   to_port          = 6379
+  #   protocol         = "tcp"
+  #   cidr_blocks      = ["0.0.0.0/0"]
+  # }
 
   ingress {
     description      = "Allow http traffic"
@@ -95,33 +95,33 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description      = "Allow traffic for income api"
-    from_port        = 3000
-    to_port          = 3000
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   description      = "Allow traffic for income api"
+  #   from_port        = 3000
+  #   to_port          = 3000
+  #   protocol         = "tcp"
+  #   cidr_blocks      = ["0.0.0.0/0"]
+  # }
 
-  ingress {
-    description      = "Allow traffic for manage arrears front end"
-    from_port        = 3001
-    to_port          = 3001
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   description      = "Allow traffic for manage arrears front end"
+  #   from_port        = 3001
+  #   to_port          = 3001
+  #   protocol         = "tcp"
+  #   cidr_blocks      = ["0.0.0.0/0"]
+  # }
 
-  ingress {
-    description      = "Allow Postgres"
-    from_port        = 5432
-    to_port          = 5432
-    protocol         = "tcp"
-    security_groups  = []
-    self             = false
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = []
-    prefix_list_ids  = []
-  }
+  # ingress {
+  #   description      = "Allow Postgres"
+  #   from_port        = 5432
+  #   to_port          = 5432
+  #   protocol         = "tcp"
+  #   security_groups  = []
+  #   self             = false
+  #   cidr_blocks      = ["0.0.0.0/0"]
+  #   ipv6_cidr_blocks = []
+  #   prefix_list_ids  = []
+  # }
   
   egress {
     from_port        = 0
@@ -137,10 +137,10 @@ resource "aws_security_group" "mtfh_finance_security_group" {
 }
 
 
-module "civicapay_cashfile_sync" {
-  source                    = "../civicapay_cashfile_sync_module"
-  environment               = var.environment_name
-  remote_lambda_role_arn    = var.remote_lambda_role_arn
-  statemachine_lambda_name  = var.statemachine_lambda_name
-  statemachine_lambda_role  = var.statemachine_lambda_role
-}
+# module "civicapay_cashfile_sync" {
+#   source                    = "../civicapay_cashfile_sync_module"
+#   environment               = var.environment_name
+#   remote_lambda_role_arn    = var.remote_lambda_role_arn
+#   statemachine_lambda_name  = var.statemachine_lambda_name
+#   statemachine_lambda_role  = var.statemachine_lambda_role
+# }

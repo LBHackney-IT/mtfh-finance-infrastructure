@@ -7,67 +7,67 @@ resource "aws_db_subnet_group" "db_subnets" {
   }
 }
 
-resource "aws_db_instance" "housing-mysql-db" {
-  identifier                  = "housing-finance-db-${var.environment_name}"
-  engine                      = "mysql"
-  engine_version              = "8.0.40"
-  instance_class              = "db.t3.medium"
-  allocated_storage           = 50
-  storage_type                = "gp2"
-  port                        = 3306
-  backup_window               = "00:01-00:31"
-  username                    = data.aws_ssm_parameter.housing_finance_mysql_username.value
-  password                    = data.aws_ssm_parameter.housing_finance_mysql_password.value
-  vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
-  db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
-  db_name                     = data.aws_ssm_parameter.housing_finance_mysql_database.value
-  monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
-  backup_retention_period     = 30
-  storage_encrypted           = true
-  deletion_protection         = true
-  multi_az                    = true
-  auto_minor_version_upgrade  = true
-  allow_major_version_upgrade = false
+# resource "aws_db_instance" "housing-mysql-db" {
+#   identifier                  = "housing-finance-db-${var.environment_name}"
+#   engine                      = "mysql"
+#   engine_version              = "8.0.40"
+#   instance_class              = "db.t3.medium"
+#   allocated_storage           = 50
+#   storage_type                = "gp2"
+#   port                        = 3306
+#   backup_window               = "00:01-00:31"
+#   username                    = data.aws_ssm_parameter.housing_finance_mysql_username.value
+#   password                    = data.aws_ssm_parameter.housing_finance_mysql_password.value
+#   vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
+#   db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
+#   db_name                     = data.aws_ssm_parameter.housing_finance_mysql_database.value
+#   monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
+#   backup_retention_period     = 30
+#   storage_encrypted           = true
+#   deletion_protection         = true
+#   multi_az                    = true
+#   auto_minor_version_upgrade  = true
+#   allow_major_version_upgrade = false
 
-  apply_immediately   = false
-  skip_final_snapshot = true
-  publicly_accessible = false
+#   apply_immediately   = false
+#   skip_final_snapshot = true
+#   publicly_accessible = false
 
-  tags = {
-    Name              = "housing-finance-db-${var.environment_name}"
-    Environment       = "${var.environment_name}"
-    terraform-managed = true
-    project_name      = "MTFH Finance"
-    BackupPolicy      = "Prod"
-  }
-}
+#   tags = {
+#     Name              = "housing-finance-db-${var.environment_name}"
+#     Environment       = "${var.environment_name}"
+#     terraform-managed = true
+#     project_name      = "MTFH Finance"
+#     BackupPolicy      = "Prod"
+#   }
+# }
 
-resource "aws_db_instance" "housing-mysql-db-replica" {
-  identifier                  = "housing-finance-db-${var.environment_name}-replica"
-  replicate_source_db         = aws_db_instance.housing-mysql-db.identifier
-  instance_class              = "db.t3.medium"
-  allocated_storage           = 50
-  storage_type                = "gp2"
-  port                        = 3306
-  backup_window               = "00:01-00:31"
-  vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
-  monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
-  backup_retention_period     = 30
-  storage_encrypted           = true
-  deletion_protection         = true
-  multi_az                    = false
-  auto_minor_version_upgrade  = true
-  allow_major_version_upgrade = false
+# resource "aws_db_instance" "housing-mysql-db-replica" {
+#   identifier                  = "housing-finance-db-${var.environment_name}-replica"
+#   replicate_source_db         = aws_db_instance.housing-mysql-db.identifier
+#   instance_class              = "db.t3.medium"
+#   allocated_storage           = 50
+#   storage_type                = "gp2"
+#   port                        = 3306
+#   backup_window               = "00:01-00:31"
+#   vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
+#   monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
+#   backup_retention_period     = 30
+#   storage_encrypted           = true
+#   deletion_protection         = true
+#   multi_az                    = false
+#   auto_minor_version_upgrade  = true
+#   allow_major_version_upgrade = false
 
-  apply_immediately   = false
-  skip_final_snapshot = true
-  publicly_accessible = false
+#   apply_immediately   = false
+#   skip_final_snapshot = true
+#   publicly_accessible = false
 
-  tags = {
-    Name              = "housing-finance-db-${var.environment_name}-replica"
-    Environment       = "${var.environment_name}"
-    terraform-managed = true
-    project_name      = "MTFH Finance"
-    BackupPolicy      = "Prod"
-  }
-}
+#   tags = {
+#     Name              = "housing-finance-db-${var.environment_name}-replica"
+#     Environment       = "${var.environment_name}"
+#     terraform-managed = true
+#     project_name      = "MTFH Finance"
+#     BackupPolicy      = "Prod"
+#   }
+# }
