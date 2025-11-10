@@ -74,17 +74,17 @@ commands:
             terraform apply -auto-approve
 
 jobs:
-  assume-role-production:
+  assume-role-disaster-recovery:
     executor: docker-python
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_PRODUCTION
-  preview-terraform-production-changes:
+  preview-terraform-disaster-recovery-changes:
     executor: docker-terraform
     steps:
       - terraform-init-then-plan:
           environment: "production"
-  terraform-init-and-apply-to-production:
+  deploy-to-disaster-recovery:
     executor: docker-terraform
     steps:
       - terraform-init-then-apply:
