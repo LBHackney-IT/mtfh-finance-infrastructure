@@ -78,7 +78,7 @@ jobs:
     executor: docker-python
     steps:
       - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_PRODUCTION
+          aws-account: $AWS_ACCOUNT_DISASTER_RECOVERY
   preview-terraform-disaster-recovery-changes:
     executor: docker-terraform
     steps:
