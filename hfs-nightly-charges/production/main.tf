@@ -3,7 +3,7 @@ provider "aws" {
   default_tags {
     tags = {
       Application = "HFS Charges Container"
-      Environment = "Disaster-Recovery"
+      Environment = "prod"
       TeamEmail   = "example@hackney.gov.uk"
     }
   }
