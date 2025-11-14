@@ -1,10 +1,10 @@
 provider "aws" {
   region  = "eu-west-2"
   default_tags {
-   tags = {
-     Environment = "Disaster-Recovery"
-     Owner       = "Housing-Team"
-     Project     = "Housing-Finance-System"
+    tags = {
+      Application = "HFS Charges Container"
+      Environment = "Disaster-Recovery"
+      TeamEmail   = "example@hackney.gov.uk"
     }
   }
 }
