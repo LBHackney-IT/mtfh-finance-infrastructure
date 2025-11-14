@@ -1,3 +1,14 @@
+provider "aws" {
+  region  = "eu-west-2"
+  default_tags {
+   tags = {
+     Environment = "Disaster-Recovery"
+     Owner       = "Housing-Team"
+     Project     = "Housing-Finance-System"
+    }
+  }
+}
+
 # Task Role IAM Policy doc
 data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
 
