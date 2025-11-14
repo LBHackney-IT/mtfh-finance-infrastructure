@@ -9,6 +9,15 @@ provider "aws" {
   }
 }
 
+terraform {
+  backend "s3" {
+    bucket  = "terraform-state-disaster-recovery"
+    encrypt = true
+    region  = "eu-west-2"
+    key     = "services/finance-charges-process-infrastructure/state"
+  }
+}
+
 # Task Role IAM Policy doc
 data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
 
