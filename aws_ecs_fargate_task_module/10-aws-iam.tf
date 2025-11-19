@@ -93,7 +93,7 @@ data "aws_iam_policy_document" "event_run_policy" {
 
   statement {
     effect    = "Allow"
-    actions   = ["ecs:RunTask", "ecs:TagResource"]
+    actions   = ["ecs:RunTask"]
     resources = [for task_def in aws_ecs_task_definition.task_definition : replace(task_def.arn, "/:\\d+$/", ":*")]
 
     condition {
@@ -102,4 +102,18 @@ data "aws_iam_policy_document" "event_run_policy" {
       values   = [var.ecs_cluster_arn]
     }
   }
+
+  statement {
+    effect   = "Allow"
+    actions  = ["ecs:TagResource"]
+    resource = ["${var.ecs_cluster_arn}/*"]
+
+     condition {
+      test     = "StringLike"
+      variable = "ecs:cluster"
+      values   = [var.ecs_cluster_arn]
+    }
+
+  }
+
 }
