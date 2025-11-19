@@ -19,7 +19,8 @@ references:
       at: *workspace_root
 
 commands:
-  remove-erc-images:
+  remove-ecr-images:
+    description: "Removing ecr images"
     steps:
       - *attach_workspace
       - checkout
@@ -123,21 +124,20 @@ jobs:
   delete-docker-images:
     executor: docker-python
     steps:
-      - remove-erc-images
+      - remove-ecr-images
 
 workflows:
   terraform-apply-disaster-recovery:
     jobs:
-
       - assume-role-disaster-recovery:
           context: api-assume-role-disaster-recovery-context
           filters:
              branches:
                only: disaster-recovery-branch
       - delete-docker-images:
-         requires:
+          requires:
             - assume-role-disaster-recovery
-        filters:
+          filters:
             branches:
               only: disaster-recovery-branch
       - preview-terraform-disaster-recovery-changes:
