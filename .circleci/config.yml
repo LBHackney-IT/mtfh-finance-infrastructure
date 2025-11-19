@@ -19,6 +19,15 @@ references:
       at: *workspace_root
 
 commands:
+  # remove-erc-images:
+  #   steps:
+  #     - *attach_workspace
+  #     - checkout
+  #     - aws-cli/install
+  #     - run:
+  #         name: delete docker-images
+  #         command: |
+  #           aws --version
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -72,6 +81,7 @@ commands:
     steps:
       - *attach_workspace
       - checkout
+      - aws-cli/install
       - run:
           command: aws --version 
       - run:
