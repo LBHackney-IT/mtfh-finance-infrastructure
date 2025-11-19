@@ -19,15 +19,15 @@ references:
       at: *workspace_root
 
 commands:
-  # remove-erc-images:
-  #   steps:
-  #     - *attach_workspace
-  #     - checkout
-  #     - aws-cli/install
-  #     - run:
-  #         name: delete docker-images
-  #         command: |
-  #           aws --version
+  remove-erc-images:
+    steps:
+      - *attach_workspace
+      - checkout
+      - aws-cli/install
+      - run:
+          name: delete docker-images
+          command: |
+            aws --version
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
@@ -81,9 +81,6 @@ commands:
     steps:
       - *attach_workspace
       - checkout
-      - aws-cli/install
-      - run:
-          command: aws --version 
       - run:
           command: |
             cd ./hfs-nightly-charges/production/
@@ -123,15 +120,26 @@ jobs:
     steps:
       - terraform-init-then-apply:
           environment: "production"
+  delete-docker-images:
+    executor: docker-python
+    steps:
+      - remove-erc-images
 
 workflows:
   terraform-apply-disaster-recovery:
     jobs:
+
       - assume-role-disaster-recovery:
           context: api-assume-role-disaster-recovery-context
           filters:
              branches:
                only: disaster-recovery-branch
+      - delete-docker-images:
+         requires:
+            - assume-role-disaster-recovery
+        filters:
+            branches:
+              only: disaster-recovery-branch
       - preview-terraform-disaster-recovery-changes:
           requires:
             - assume-role-disaster-recovery
@@ -151,3 +159,4 @@ workflows:
           filters:
             branches:
               only: disaster-recovery-branch
+      
