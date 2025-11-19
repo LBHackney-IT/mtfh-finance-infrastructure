@@ -79,10 +79,10 @@ commands:
             terraform init
           name: get and init
       - run:
-          name: destory charges
+          name: destroy charges
           command: |
             cd ./hfs-nightly-charges/production/
-            terraform destory -auto-approve
+            terraform destroy -auto-approve
       - run:
           command: |
             cd ./<<parameters.environment>>/
