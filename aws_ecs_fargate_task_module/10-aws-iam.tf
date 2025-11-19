@@ -93,7 +93,7 @@ data "aws_iam_policy_document" "event_run_policy" {
 
   statement {
     effect    = "Allow"
-    actions   = ["ecs:RunTask"]
+    actions   = ["ecs:RunTask", "ecs:TagResource"]
     resources = [for task_def in aws_ecs_task_definition.task_definition : replace(task_def.arn, "/:\\d+$/", ":*")]
 
     condition {
