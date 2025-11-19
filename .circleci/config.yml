@@ -28,7 +28,9 @@ commands:
       - run:
           name: delete docker-images
           command: |
-            aws --version
+            aws ecr batch-delete-image \
+              --repository-name hfs-nightly-jobs-charges-ingest \
+              --image-ids imageTag=latest 
   assume-role-and-persist-workspace:
     description: "Assumes deployment role and persists credentials across jobs"
     parameters:
