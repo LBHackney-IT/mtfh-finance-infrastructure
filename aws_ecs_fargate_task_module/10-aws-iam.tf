@@ -106,7 +106,7 @@ data "aws_iam_policy_document" "event_run_policy" {
   statement {
     effect   = "Allow"
     actions  = ["ecs:TagResource"]
-    resource = ["${var.ecs_cluster_arn}/*"]
+    resources = ["${var.ecs_cluster_arn}/*"]
 
      condition {
       test     = "StringLike"
