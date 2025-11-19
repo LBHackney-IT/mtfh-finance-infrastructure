@@ -52,7 +52,7 @@ commands:
           name: plan root-infrastructure
           command: |
             cd ./<<parameters.environment>>/
-            terraform plan
+            terraform plan -destroy
       - run:
           name: init charges-infrastructure
           command: |
@@ -63,7 +63,7 @@ commands:
           name: plan
           command: |
             cd ./hfs-nightly-charges/production/
-            terraform plan
+            terraform plan -destroy
   terraform-init-then-apply:
     description: "Initializes and applies terraform configuration"
     parameters:
@@ -74,26 +74,26 @@ commands:
       - checkout
       - run:
           command: |
-            cd ./<<parameters.environment>>/
-            terraform get -update=true
-            terraform init
-          name: get and init
-      - run:
-          name: apply
-          command: |
-            cd ./<<parameters.environment>>/
-            terraform apply -auto-approve
-      - run:
-          command: |
             cd ./hfs-nightly-charges/production/
             terraform get -update=true
             terraform init
           name: get and init
       - run:
-          name: apply
+          name: destory charges
           command: |
             cd ./hfs-nightly-charges/production/
-            terraform apply -auto-approve
+            terraform destory -auto-approve
+      - run:
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform get -update=true
+            terraform init
+          name: get and init
+      - run:
+          name: destroy shared
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform destroy -auto-approve
 
 jobs:
   assume-role-disaster-recovery:
