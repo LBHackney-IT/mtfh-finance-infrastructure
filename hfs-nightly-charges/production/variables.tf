@@ -24,5 +24,5 @@ variable "aws_subnet_ids" {
 
 variable "charges_cron_expression" {
   type    = string
-  default = "cron(27 15 * * ? *)"
+  default = "cron(46 15 * * ? *)"
 }
