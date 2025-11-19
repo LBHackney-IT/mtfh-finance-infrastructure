@@ -73,6 +73,8 @@ commands:
       - *attach_workspace
       - checkout
       - run:
+          command: aws --version 
+      - run:
           command: |
             cd ./hfs-nightly-charges/production/
             terraform get -update=true
