@@ -95,49 +95,20 @@ jobs:
           environment: "disaster-recovery"
 
 workflows:
-  preview-disaster-recovery-from-feature-branch:
-    jobs:
-      - assume-role-disaster-recovery:
-          context: api-assume-role-disaster-recovery-context
-          filters:
-             branches:
-               ignore: main
-      - preview-terraform-disaster-recovery-changes:
-          requires:
-            - assume-role-disaster-recovery
-          filters:
-            branches:
-              ignore: main
   terraform-apply-disaster-recovery:
     jobs:
-      - start-disaster-recovery-release:
-          type: approval
-          filters:
-            branches:
-              only: main
       - assume-role-disaster-recovery:
           context: api-assume-role-disaster-recovery-context
-          requires:
-              - start-disaster-recovery-release
-          filters:
-             branches:
-               only: main
       - preview-terraform-disaster-recovery-changes:
           requires:
             - assume-role-disaster-recovery
-          filters:
-            branches:
-              only: main
       - permit-disaster-recovery-terraform-release:
           type: approval
           requires:
             - preview-terraform-disaster-recovery-changes
-          filters:
-            branches:
-              only: main
       - terraform-init-and-apply-to-disaster-recovery:
           requires:
             - permit-disaster-recovery-terraform-release
           filters:
             branches:
-              only: main
+              only: disaster-recovery-finance-db
