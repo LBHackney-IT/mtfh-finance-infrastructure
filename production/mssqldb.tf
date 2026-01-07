@@ -48,7 +48,8 @@ resource "aws_db_instance" "mssql-ee" {
   lifecycle {
     prevent_destroy   = true
     ignore_changes    = [
-      storage_encrypted
+      storage_encrypted,
+      snapshot_identifier,
     ]
   }  
 }
