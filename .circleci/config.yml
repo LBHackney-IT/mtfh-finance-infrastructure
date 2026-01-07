@@ -98,7 +98,7 @@ workflows:
   preview-disaster-recovery-from-feature-branch:
     jobs:
       - assume-role-disaster-recovery:
-          context: api-assume-role-housing-disaster-recovery-context
+          context: api-assume-role-disaster-recovery-context
           filters:
              branches:
                ignore: main
