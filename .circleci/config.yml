@@ -86,13 +86,13 @@ jobs:
     executor: docker-terraform
     steps:
       - terraform-init-then-plan:
-          environment: "disaster-recovery"
+          environment: "production"
   # Infrastructure deployment:
   terraform-init-and-apply-to-disaster-recovery:
     executor: docker-terraform
     steps:
       - terraform-init-then-apply:
-          environment: "disaster-recovery"
+          environment: "production"
 
 workflows:
   terraform-apply-disaster-recovery:
