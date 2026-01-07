@@ -116,7 +116,7 @@ workflows:
             branches:
               only: main
       - assume-role-disaster-recovery:
-          context: api-assume-role-housing-disaster-recovery-context
+          context: api-assume-role-disaster-recovery-context
           requires:
               - start-disaster-recovery-release
           filters:
