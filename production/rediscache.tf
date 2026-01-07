@@ -1,6 +1,6 @@
 resource "aws_elasticache_subnet_group" "redis_subnets" {
   name       = "housing-finance-redis-subnet-${var.environment_name}"
-  subnet_ids = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
+  subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
   lifecycle {
     create_before_destroy = true
   }

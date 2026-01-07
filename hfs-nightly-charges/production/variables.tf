@@ -19,7 +19,7 @@ variable "vpc_id" {
 
 variable "aws_subnet_ids" {
   type    = list(any)
-  default = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
+  default = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
 }
 
 variable "charges_cron_expression" {

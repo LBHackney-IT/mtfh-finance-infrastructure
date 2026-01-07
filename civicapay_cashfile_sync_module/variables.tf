@@ -49,7 +49,7 @@ variable "civica_sftp_s3_access_policy" {
 
 variable "bucketName" {
   description = "provide bucket name"
-  default     = "civica-sftp-cashfile-bucket"
+  default     = "civica-sftp-cashfile-bucket-dr"
   type        = string
 }
 

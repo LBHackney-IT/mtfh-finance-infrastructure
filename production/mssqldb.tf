@@ -1,7 +1,7 @@
 # MS SQL Server DB Setup (no common resource)
 resource "aws_db_subnet_group" "mssql_db_subnets" {
   name       = "housing-finance-mssql-db-subnet-${var.environment_name}"
-  subnet_ids = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
+  subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
   lifecycle {
     create_before_destroy = true
   }
