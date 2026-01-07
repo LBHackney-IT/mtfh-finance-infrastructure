@@ -1,11 +1,11 @@
 # MySQL Database Setup
-resource "aws_db_subnet_group" "db_subnets" {
-  name       = "housing-finance-db-subnet-${var.environment_name}"
-  subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+# resource "aws_db_subnet_group" "db_subnets" {
+#   name       = "housing-finance-db-subnet-${var.environment_name}"
+#   subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 resource "aws_db_instance" "housing-mysql-db" {
   identifier                  = "housing-finance-db-${var.environment_name}"
@@ -19,7 +19,8 @@ resource "aws_db_instance" "housing-mysql-db" {
   username                    = data.aws_ssm_parameter.housing_finance_mysql_username.value
   password                    = data.aws_ssm_parameter.housing_finance_mysql_password.value
   vpc_security_group_ids      = [aws_security_group.mtfh_finance_security_group.id]
-  db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
+  # db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
+  db_subnet_group_name        = "housing-finance-db-subnet-${var.environment_name}"
   db_name                     = data.aws_ssm_parameter.housing_finance_mysql_database.value
   monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
   backup_retention_period     = 30

@@ -1,10 +1,10 @@
-resource "aws_elasticache_subnet_group" "redis_subnets" {
-  name       = "housing-finance-redis-subnet-${var.environment_name}"
-  subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+# resource "aws_elasticache_subnet_group" "redis_subnets" {
+#   name       = "housing-finance-redis-subnet-${var.environment_name}"
+#   subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 resource "aws_elasticache_replication_group" "redis_cache" {
   automatic_failover_enabled    = true
@@ -16,7 +16,8 @@ resource "aws_elasticache_replication_group" "redis_cache" {
   engine_version        = "5.0.6"
   port                  = 6379
   security_group_ids    = [aws_security_group.mtfh_finance_security_group.id]
-  subnet_group_name     = "${aws_elasticache_subnet_group.redis_subnets.name}"
+  # subnet_group_name     = "${aws_elasticache_subnet_group.redis_subnets.name}"
+  subnet_group_name     = "housing-finance-redis-subnet-${var.environment_name}"
 }
 
 resource "aws_elasticache_cluster" "replica" {

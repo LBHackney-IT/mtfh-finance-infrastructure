@@ -1,11 +1,11 @@
 # MS SQL Server DB Setup (no common resource)
-resource "aws_db_subnet_group" "mssql_db_subnets" {
-  name       = "housing-finance-mssql-db-subnet-${var.environment_name}"
-  subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+# resource "aws_db_subnet_group" "mssql_db_subnets" {
+#   name       = "housing-finance-mssql-db-subnet-${var.environment_name}"
+#   subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 
 resource "aws_db_instance" "mssql-ee" {
@@ -19,7 +19,8 @@ resource "aws_db_instance" "mssql-ee" {
   username                = data.aws_ssm_parameter.housing_finance_mssql_username.value
   password                = data.aws_ssm_parameter.housing_finance_mssql_password.value
   vpc_security_group_ids  = [aws_security_group.mtfh_finance_security_group.id]
-  db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
+  # db_subnet_group_name    = aws_db_subnet_group.mssql_db_subnets.name
+  db_subnet_group_name    = "housing-finance-mssql-db-subnet-${var.environment_name}"
   multi_az                = true
   publicly_accessible     = false
   backup_retention_period = 30
