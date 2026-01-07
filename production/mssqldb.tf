@@ -15,7 +15,7 @@ resource "aws_db_instance" "mssql-ee" {
   engine_version          = "15.00.4198.2.v1"
   instance_class          = "db.t3.xlarge"
   license_model           = "license-included"
-  identifier              = "${var.mssql-db-target}-${var.environment_name}"
+  identifier              = "${var.mssql-db-target}-${var.environment_name}-dr"
   username                = data.aws_ssm_parameter.housing_finance_mssql_username.value
   password                = data.aws_ssm_parameter.housing_finance_mssql_password.value
   vpc_security_group_ids  = [aws_security_group.mtfh_finance_security_group.id]
@@ -33,6 +33,8 @@ resource "aws_db_instance" "mssql-ee" {
   auto_minor_version_upgrade  = true
   maintenance_window          = "Sun:10:00-Sun:12:00"
   backup_window               = "22:30-23:30"
+
+  snapshot_identifier = "awsbackup:copyjob-1e28ca10-0418-4991-a551-02e43a52da65"
 
   tags = {
     Name              = "${var.mssql-db-target}-${var.environment_name}"
