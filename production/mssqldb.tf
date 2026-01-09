@@ -52,3 +52,25 @@ resource "aws_db_instance" "mssql-ee" {
     ]
   }  
 }
+resource "aws_db_instance" "db_ee_replica" {
+  identifier             = "${var.mssql-db-target}-${var.environment_name}-replica"
+  replicate_source_db    = aws_db_instance.mssql-ee.identifier
+  instance_class         = "db.t3.xlarge"
+  skip_final_snapshot    = true
+  deletion_protection    = false
+  
+  tags = {
+    Name              = "${var.mssql-db-target}-${var.environment_name}-replica"
+    Environment       = "${var.environment_name}"
+    terraform-managed = true
+    project_name      = "MTFH Finance"
+    Backup            = "false"
+  }
+  
+  lifecycle {
+    ignore_changes = [
+      storage_encrypted,
+      snapshot_identifier,
+    ]
+  }
+}
