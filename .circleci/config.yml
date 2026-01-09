@@ -33,9 +33,9 @@ commands:
           root: *workspace_root
           paths:
             - .aws
-  # Init then Plan is used for "Preview" - don't add any "apply" steps
-  terraform-init-then-plan:
-    description: "Initializes and applies terraform configuration"
+  # Init then Plan Destroy - preview what will be destroyed
+  terraform-init-then-plan-destroy:
+    description: "Initializes and plans terraform destroy configuration"
     parameters:
       environment:
         type: string
@@ -49,14 +49,13 @@ commands:
             terraform init
           name: get and init
       - run:
-      # PLEASE LEAVE THIS AS A PLAN, IF YOU WANT TO CHANGE IT THEN SPEAK TO HUMAIRAA FIRST. 
-          name: plan
+          name: plan destroy
           command: |
             cd ./<<parameters.environment>>/
-            terraform plan
-  # Used for actual deployment of Terraform resources.
-  terraform-init-then-apply:
-    description: "Initializes and applies terraform configuration"
+            terraform plan -destroy
+  # Used for destroying Terraform resources.
+  terraform-init-then-destroy:
+    description: "Initializes and destroys terraform configuration"
     parameters:
       environment:
         type: string
@@ -70,10 +69,10 @@ commands:
             terraform init
           name: get and init
       - run:
-          name: apply
+          name: destroy
           command: |
             cd ./<<parameters.environment>>/
-            terraform apply -auto-approve
+            terraform destroy -auto-approve
 
 jobs:
   # Auth:
@@ -82,33 +81,33 @@ jobs:
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_DISASTER_RECOVERY
-  preview-terraform-disaster-recovery-changes:
+  preview-terraform-disaster-recovery-destroy:
     executor: docker-terraform
     steps:
-      - terraform-init-then-plan:
+      - terraform-init-then-plan-destroy:
           environment: "production"
-  # Infrastructure deployment:
-  terraform-init-and-apply-to-disaster-recovery:
+  # Infrastructure destruction:
+  terraform-init-and-destroy-disaster-recovery:
     executor: docker-terraform
     steps:
-      - terraform-init-then-apply:
+      - terraform-init-then-destroy:
           environment: "production"
 
 workflows:
-  terraform-apply-disaster-recovery:
+  terraform-destroy-disaster-recovery:
     jobs:
       - assume-role-disaster-recovery:
           context: api-assume-role-disaster-recovery-context
-      - preview-terraform-disaster-recovery-changes:
+      - preview-terraform-disaster-recovery-destroy:
           requires:
             - assume-role-disaster-recovery
-      - permit-disaster-recovery-terraform-release:
+      - permit-disaster-recovery-terraform-destroy:
           type: approval
           requires:
-            - preview-terraform-disaster-recovery-changes
-      - terraform-init-and-apply-to-disaster-recovery:
+            - preview-terraform-disaster-recovery-destroy
+      - terraform-init-and-destroy-disaster-recovery:
           requires:
-            - permit-disaster-recovery-terraform-release
+            - permit-disaster-recovery-terraform-destroy
           filters:
             branches:
               only: disaster-recovery-finance-db
