@@ -95,6 +95,26 @@ commands:
           command: |
             cd ./<<parameters.environment>>/
             terraform plan -destroy
+  # Apply changes to disable deletion protection before destroy
+  terraform-init-then-apply:
+    description: "Initializes and applies terraform configuration"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform get -update=true
+            terraform init
+          name: get and init
+      - run:
+          name: apply
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform apply -auto-approve
   # Used for destroying Terraform resources.
   terraform-init-then-destroy:
     description: "Initializes and destroys terraform configuration"
@@ -133,6 +153,12 @@ jobs:
     steps:
       - terraform-init-then-plan-destroy:
           environment: "production"
+  # Apply changes to disable deletion protection:
+  apply-disaster-recovery-changes:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-apply:
+          environment: "production"
   # Infrastructure destruction:
   terraform-init-and-destroy-disaster-recovery:
     executor: docker-terraform
@@ -155,9 +181,12 @@ workflows:
           type: approval
           requires:
             - preview-terraform-disaster-recovery-destroy
-      - terraform-init-and-destroy-disaster-recovery:
+      - apply-disaster-recovery-changes:
           requires:
             - permit-disaster-recovery-terraform-destroy
+      - terraform-init-and-destroy-disaster-recovery:
+          requires:
+            - apply-disaster-recovery-changes
           filters:
             branches:
               only: disaster-recovery-finance-db
