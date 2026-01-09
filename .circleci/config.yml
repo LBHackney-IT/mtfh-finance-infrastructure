@@ -63,13 +63,14 @@ commands:
             terraform import -input=false aws_db_instance.mssql-ee housing-finance-sql-db-production-dr || true
             terraform import -input=false aws_db_instance.db_ee_replica housing-finance-sql-db-production-replica || true
             # Import Postgres database from module
-            terraform import -input=false module.postgres_db_production.aws_db_subnet_group.db_subnets financedbproduction-db-subnet-production || true
+            terraform import -input=false module.postgres_db_production.aws_db_subnet_group.db_subnets uh_mirror-db-subnet-production || true
             terraform import -input=false module.postgres_db_production.aws_db_instance.lbh-db uh-mirror-db-production || true
             # Import Civicapay S3 resources
             terraform import -input=false module.civicapay_cashfile_sync.aws_s3_bucket.sftpbucket civica-sftp-cashfile-bucket-dr-production || true
             terraform import -input=false module.civicapay_cashfile_sync.aws_s3_bucket_lifecycle_configuration.lc civica-sftp-cashfile-bucket-dr-production || true
             # Import IAM resources
             terraform import -input=false module.civicapay_cashfile_sync.aws_iam_policy.local_lambda_s3_access_policy arn:aws:iam::851725205572:policy/Civica_sftp_s3_access_policy || true
+            terraform import -input=false module.civicapay_cashfile_sync.aws_lambda_permission.lambda_trigger_perms housing-finance-interim-api-production-check-cash-files/AllowS3Invoke || true
   # Init then Plan Destroy - preview what will be destroyed
   terraform-init-then-plan-destroy:
     description: "Initializes and plans terraform destroy configuration"
