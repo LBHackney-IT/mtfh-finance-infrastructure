@@ -49,6 +49,11 @@ commands:
             terraform init
           name: get and init
       - run:
+          name: refresh state
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform apply -refresh-only -auto-approve
+      - run:
           name: plan destroy
           command: |
             cd ./<<parameters.environment>>/
