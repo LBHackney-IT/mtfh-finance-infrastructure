@@ -12,7 +12,7 @@ module "postgres_db_production" {
   db_instance_class = "db.t3.medium"
   db_name = "uh_mirror"
   db_port  = 5300
-  db_username = "uhapi_admin"
+  db_username = data.aws_ssm_parameter.housing_finance_postgres_username.value
   db_password = data.aws_ssm_parameter.housing_finance_postgres_password.value
   subnet_ids = ["subnet-05e595c59b7d6c8df","subnet-0e6bc9b4ac24493cc"]
   db_allocated_storage = 20
