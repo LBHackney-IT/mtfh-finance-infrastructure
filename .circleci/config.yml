@@ -33,6 +33,29 @@ commands:
           root: *workspace_root
           paths:
             - .aws
+  # Import existing resources into Terraform state
+  terraform-init-then-import:
+    description: "Initializes and imports existing resources into terraform state"
+    parameters:
+      environment:
+        type: string
+    steps:
+      - *attach_workspace
+      - checkout
+      - run:
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform get -update=true
+            terraform init
+          name: get and init
+      - run:
+          name: import existing resources
+          command: |
+            cd ./<<parameters.environment>>/
+            terraform import -input=false aws_db_instance.housing-mysql-db housing-finance-db-production || true
+            terraform import -input=false aws_db_instance.housing-mysql-db-replica housing-finance-db-production-replica || true
+            terraform import -input=false aws_db_instance.mssql-ee housing-finance-sql-db-production-dr || true
+            terraform import -input=false aws_db_instance.db_ee_replica housing-finance-sql-db-production-replica || true
   # Init then Plan Destroy - preview what will be destroyed
   terraform-init-then-plan-destroy:
     description: "Initializes and plans terraform destroy configuration"
@@ -86,6 +109,11 @@ jobs:
     steps:
       - assume-role-and-persist-workspace:
           aws-account: $AWS_ACCOUNT_DISASTER_RECOVERY
+  import-disaster-recovery-resources:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-import:
+          environment: "production"
   preview-terraform-disaster-recovery-destroy:
     executor: docker-terraform
     steps:
@@ -103,9 +131,12 @@ workflows:
     jobs:
       - assume-role-disaster-recovery:
           context: api-assume-role-disaster-recovery-context
-      - preview-terraform-disaster-recovery-destroy:
+      - import-disaster-recovery-resources:
           requires:
             - assume-role-disaster-recovery
+      - preview-terraform-disaster-recovery-destroy:
+          requires:
+            - import-disaster-recovery-resources
       - permit-disaster-recovery-terraform-destroy:
           type: approval
           requires:
