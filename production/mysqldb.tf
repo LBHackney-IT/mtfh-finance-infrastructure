@@ -25,7 +25,7 @@ resource "aws_db_instance" "housing-mysql-db" {
   monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
   backup_retention_period     = 30
   storage_encrypted           = true
-  deletion_protection         = true
+  deletion_protection         = false
   multi_az                    = true
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
@@ -55,7 +55,7 @@ resource "aws_db_instance" "housing-mysql-db-replica" {
   monitoring_interval         = 0 //this is for enhanced Monitoring there will already be some basic monitoring available
   backup_retention_period     = 30
   storage_encrypted           = true
-  deletion_protection         = true
+  deletion_protection         = false
   multi_az                    = false
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
