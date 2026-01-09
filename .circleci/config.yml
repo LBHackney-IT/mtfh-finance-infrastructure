@@ -88,6 +88,10 @@ commands:
           command: |
             cd ./<<parameters.environment>>/
             terraform apply -refresh-only -auto-approve
+            # Remove Postgres resources from state - they were never part of this DR deployment
+            terraform state rm module.postgres_db_production.aws_db_instance.lbh-db || true
+            terraform state rm module.postgres_db_production.aws_db_subnet_group.db_subnets || true
+            terraform state rm module.postgres_db_production.module.db_security_group.aws_security_group.lbh_db_traffic || true
       - run:
           name: plan destroy
           command: |
@@ -112,6 +116,10 @@ commands:
           name: apply
           command: |
             cd ./<<parameters.environment>>/
+            # Remove Postgres resources from state before apply - they were never part of this DR deployment
+            terraform state rm module.postgres_db_production.aws_db_instance.lbh-db || true
+            terraform state rm module.postgres_db_production.aws_db_subnet_group.db_subnets || true
+            terraform state rm module.postgres_db_production.module.db_security_group.aws_security_group.lbh_db_traffic || true
             terraform apply -auto-approve
   # Used for destroying Terraform resources.
   terraform-init-then-destroy:
