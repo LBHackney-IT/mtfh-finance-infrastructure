@@ -62,9 +62,6 @@ commands:
             # Import MSSQL databases
             terraform import -input=false aws_db_instance.mssql-ee housing-finance-sql-db-production-dr || true
             terraform import -input=false aws_db_instance.db_ee_replica housing-finance-sql-db-production-replica || true
-            # Import Postgres database from module
-            terraform import -input=false module.postgres_db_production.aws_db_subnet_group.db_subnets uh_mirror-db-subnet-production || true
-            terraform import -input=false module.postgres_db_production.aws_db_instance.lbh-db uh-mirror-db-production || true
             # Import Civicapay S3 resources
             terraform import -input=false module.civicapay_cashfile_sync.aws_s3_bucket.sftpbucket civica-sftp-cashfile-bucket-dr-production || true
             terraform import -input=false module.civicapay_cashfile_sync.aws_s3_bucket_lifecycle_configuration.lc civica-sftp-cashfile-bucket-dr-production || true
