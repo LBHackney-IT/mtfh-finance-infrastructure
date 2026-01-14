@@ -48,6 +48,13 @@ resource "aws_db_instance" "lbh-db" {
 
   snapshot_identifier    = var.snapshot_identifier
 
+  dynamic "lifecycle" {
+    for_each = var.snapshot_identifier != null ? [1] : []
+    content {
+      ignore_changes = [snapshot_identifier]
+    }
+  }
+
   tags = merge(
     var.additional_tags,
     {
