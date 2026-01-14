@@ -3,11 +3,11 @@ data "aws_kms_alias" "local_backup_key" {
   name = "alias/local-backup-key"
 }
 
-data "aws_db_snapshot" "latest_snapshot" {
-  db_instance_identifier = "mtfh-finance-pgdb-db-development"
-  most_recent            = true
-  snapshot_type          = "automated"
-}
+# data "aws_db_snapshot" "latest_snapshot" {
+#   db_instance_identifier = "mtfh-finance-pgdb-db-development"
+#   most_recent            = true
+#   snapshot_type          = "automated"
+# }
 
 
 # Propref - Paymentref link database
@@ -35,5 +35,5 @@ module "postgres_db_development" {
   publicly_accessible = false
   project_name = "housing finance"
   vpc_security_group_ids = ["sg-0b1844c4c2d5096a2"] // mtfh-finance-allowdb-traffic-production
-  snapshot_identifier = data.aws_db_snapshot.latest_snapshot.id
+  snapshot_identifier = "rds:mtfh-finance-pgdb-db-development-2026-01-14-10-41"
 }
