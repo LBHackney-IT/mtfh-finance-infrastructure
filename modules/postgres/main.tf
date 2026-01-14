@@ -33,7 +33,8 @@ resource "aws_db_instance" "lbh-db" {
   db_name                     = var.db_name
   monitoring_interval         = 0 //this is for enhanced Monitoring there will allready be some basic monitering avalable
   backup_retention_period     = 30
-  storage_encrypted           = true
+  storage_encrypted           = var.storage_encrypted
+  kms_key_id                  = var.kms_key_id
   deletion_protection         = false
   multi_az                    = var.multi_az
   auto_minor_version_upgrade  = true
