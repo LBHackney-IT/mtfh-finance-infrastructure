@@ -46,6 +46,8 @@ resource "aws_db_instance" "lbh-db" {
   skip_final_snapshot = true
   publicly_accessible = var.publicly_accessible
 
+  snapshot_identifier    = var.snapshot_identifier
+
   tags = merge(
     var.additional_tags,
     {

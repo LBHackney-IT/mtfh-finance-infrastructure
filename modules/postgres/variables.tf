@@ -81,3 +81,9 @@ variable "additional_tags" {
   type        = map(any)
   default     = {}
 }
+
+variable "snapshot_identifier" {
+  description = "Specifies whether or not to create this database from a snapshot."
+  type        = string
+  default     = null
+}
