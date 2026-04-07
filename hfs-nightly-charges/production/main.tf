@@ -75,6 +75,11 @@ resource "aws_sns_topic" "housing_finance_alarms" {
   name = "housing-finance-alarms"
 }
 
+import {
+  to = aws_sns_topic.housing_finance_alarms
+  id = "arn:aws:sns:eu-west-2:282997303675:housing-finance-alarms"
+}
+
 # Using the Fargate Task module
 module "hfs-nightly-charges" {
   source = "../../aws_ecs_fargate_task_module"
