@@ -52,6 +52,10 @@ resource "aws_security_group" "mtfh_finance_security_group" {
     to_port          = 5432
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    prefix_list_ids  = []
+    security_groups  = []
+    self             = false
   }
 
   tags = {

@@ -70,7 +70,12 @@ commands:
             terraform get -update=true
             terraform init
             # Import existing SNS topic if not in state
-            terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:364864573329:housing-finance-alarms || true
+            # Note: This is now handled in the hfs-nightly-charges path if that was the intended root, 
+            # but since the error happened in the current root, we ensure it's imported correctly.
+            # If this root doesn't have the resource, we skip.
+            if grep -q "resource \"aws_sns_topic\" \"housing_finance_alarms\"" main.tf; then
+              terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:364864573329:housing-finance-alarms || true
+            fi
           name: get, init and import
       - run:
           name: apply
