@@ -70,9 +70,9 @@ resource "aws_security_group_rule" "inbound_traffic_to_mssql" {
   ipv6_cidr_blocks  = ["::/0"]
 }
 
-# Create an SNS Topic. There should only be a single Topic for HFS Nightly Jobs - per environment (reuse this for any future Fargate process)
-resource "aws_sns_topic" "sns_alarms" {
-  name = "hfs-nightly-jobs-alarms-${var.environment}"
+# Use the existing housing-finance-alarms SNS Topic
+resource "aws_sns_topic" "housing_finance_alarms" {
+  name = "housing-finance-alarms"
 }
 
 # Using the Fargate Task module
@@ -96,7 +96,7 @@ module "hfs-nightly-charges" {
       task_memory = 512
       environment_variables = [
         { name = "ENVIRONMENT", value = "${var.environment}" },
-        { name = "SNS_TOPIC_ARN", value = aws_sns_topic.sns_alarms.arn }
+        { name = "SNS_TOPIC_ARN", value = aws_sns_topic.housing_finance_alarms.arn }
       ]
 
       cloudwatch_rule_schedule_expression = var.charges_cron_expression

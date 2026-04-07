@@ -69,7 +69,9 @@ commands:
             cd ./<<parameters.environment>>/
             terraform get -update=true
             terraform init
-          name: get and init
+            # Import existing SNS topic if not in state
+            terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:364864573329:housing-finance-alarms || true
+          name: get, init and import
       - run:
           name: apply
           command: |
