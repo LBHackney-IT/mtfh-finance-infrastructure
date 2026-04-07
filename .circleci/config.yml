@@ -66,16 +66,17 @@ commands:
       - checkout
       - run:
           command: |
-            cd ./<<parameters.environment>>/
-            terraform get -update=true
-            terraform init
-            # Import existing SNS topic if not in state
-            # Note: This is now handled in the hfs-nightly-charges path if that was the intended root, 
-            # but since the error happened in the current root, we ensure it's imported correctly.
-            # If this root doesn't have the resource, we skip.
-            if grep -q "resource \"aws_sns_topic\" \"housing_finance_alarms\"" main.tf; then
-              terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:364864573329:housing-finance-alarms || true
-            fi
+             cd ./<<parameters.environment>>/
+             terraform get -update=true
+             terraform init
+
+             # Handle HFS Nightly Charges sub-project import
+             if [ -d "../hfs-nightly-charges/<<parameters.environment>>" ]; then
+               cd ../hfs-nightly-charges/<<parameters.environment>>
+               terraform init
+               terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:364864573329:housing-finance-alarms || true
+               cd ../../<<parameters.environment>>
+             fi
           name: get, init and import
       - run:
           name: apply
