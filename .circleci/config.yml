@@ -74,7 +74,15 @@ commands:
              if [ -d "../hfs-nightly-charges/<<parameters.environment>>" ]; then
                cd ../hfs-nightly-charges/<<parameters.environment>>
                terraform init
-               terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:364864573329:housing-finance-alarms || true
+               
+               if [ "<<parameters.environment>>" == "development" ]; then
+                 terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:364864573329:housing-finance-alarms || true
+               elif [ "<<parameters.environment>>" == "staging" ]; then
+                 terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:087586271961:housing-finance-alarms || true
+               elif [ "<<parameters.environment>>" == "production" ]; then
+                 terraform import aws_sns_topic.housing_finance_alarms arn:aws:sns:eu-west-2:282997303675:housing-finance-alarms || true
+               fi
+               
                cd ../../<<parameters.environment>>
              fi
           name: get, init and import
