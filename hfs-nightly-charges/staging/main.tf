@@ -70,7 +70,7 @@ resource "aws_security_group_rule" "inbound_traffic_to_mssql" {
   ipv6_cidr_blocks  = ["::/0"]
 }
 
-# Use the existing housing-finance-alarms SNS Topic
+# SNS topic for overnight process errors
 resource "aws_sns_topic" "housing_finance_alarms" {
   name = "housing-finance-alarms"
 }
