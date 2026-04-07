@@ -18,11 +18,8 @@ resource "aws_s3_bucket" "sftpbucket" {
 resource "aws_s3_bucket_lifecycle_configuration" "lc" {
   bucket = aws_s3_bucket.sftpbucket.id
   rule {
-    id     = "30_day_expiry"
     status = "Enabled"
-
-    filter {}
-
+    id     = "30_day_expiry"
     expiration {
       days = 30
     }

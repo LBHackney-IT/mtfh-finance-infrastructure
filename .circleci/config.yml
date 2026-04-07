@@ -70,7 +70,7 @@ commands:
              terraform get -update=true
              terraform init
 
-             # Handle HFS Nightly Charges sub-project import
+             # TEMPORARY - Handle HFS Nightly Charges sub-project import
              if [ -d "../hfs-nightly-charges/<<parameters.environment>>" ]; then
                cd ../hfs-nightly-charges/<<parameters.environment>>
                terraform init
