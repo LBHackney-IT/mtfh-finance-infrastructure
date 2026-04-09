@@ -45,6 +45,8 @@ resource "aws_db_instance" "housing-mysql-db" {
 resource "aws_db_instance" "housing-mysql-db-replica" {
   identifier                  = "housing-finance-db-${var.environment_name}-replica"
   replicate_source_db         = aws_db_instance.housing-mysql-db.identifier
+  engine                      = "mysql"
+  engine_version              = "8.0"
   instance_class              = "db.t3.medium"
   allocated_storage           = 50
   storage_type                = "gp2"
