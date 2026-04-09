@@ -1,5 +1,9 @@
 # Postg Database Setup
 
+data "aws_kms_key" "local_backup_key" {
+  key_id = "alias/local-backup-key"
+}
+
 # Propref - Paymentref link database
 module "postgres_db_production" {
   source = "../modules/postgres"
@@ -24,4 +28,10 @@ module "postgres_db_production" {
   project_name = "housing finance"
   backup_policy = "Prod"
   vpc_security_group_ids = ["sg-07d40f16ad18f1f60"]
+  kms_key_id = data.aws_kms_key.local_backup_key.arn
+}
+
+import {
+  to = module.postgres_db_production.aws_db_instance.lbh-db
+  id = "mtfh-finance-pgdb-db-production"
 }
