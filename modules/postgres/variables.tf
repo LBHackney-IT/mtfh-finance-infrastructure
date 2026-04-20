@@ -70,8 +70,20 @@ variable "backup_window" {
   type = string
 }
 
+variable "kms_key_id" {
+  description = "The ARN for the KMS encryption key."
+  type        = string
+  default     = null
+}
+
 variable "additional_tags" {
   description = "Additional tags to be added to the RDS instance"
   type        = map(any)
   default     = {}
+}
+
+variable "snapshot_identifier" {
+  description = "Specifies whether or not to create this database from a snapshot."
+  type        = string
+  default     = null
 }
