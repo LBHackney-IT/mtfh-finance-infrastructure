@@ -29,7 +29,7 @@ resource "aws_db_instance" "lbh-db" {
   username                    = var.db_username
   password                    = var.db_password
   vpc_security_group_ids      = var.vpc_security_group_ids
-  db_subnet_group_name        = aws_db_subnet_group.db_subnets.name
+  db_subnet_group_name        = var.existing_db_subnet_group_name != null ? var.existing_db_subnet_group_name : aws_db_subnet_group.db_subnets.name
   db_name                     = var.db_name
   monitoring_interval         = 0 //this is for enhanced Monitoring there will allready be some basic monitering avalable
   backup_retention_period     = 30
@@ -41,9 +41,10 @@ resource "aws_db_instance" "lbh-db" {
 
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
 
-  apply_immediately   = false
-  skip_final_snapshot = true
-  publicly_accessible = var.publicly_accessible
+  apply_immediately     = false
+  skip_final_snapshot   = true
+  publicly_accessible   = var.publicly_accessible
+  copy_tags_to_snapshot = true
 
   tags = merge(
     var.additional_tags,

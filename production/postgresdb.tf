@@ -15,6 +15,7 @@ module "postgres_db_production" {
   db_username = data.aws_ssm_parameter.housing_finance_postgres_username.value
   db_password = data.aws_ssm_parameter.housing_finance_postgres_password.value
   subnet_ids = ["subnet-0beb266003a56ca82","subnet-06a697d86a9b6ed01"]
+  existing_db_subnet_group_name = "housing-finance-db-subnet-production"
   db_allocated_storage = 100
   maintenance_window ="sun:10:00-sun:10:30"
   backup_window = "00:01-00:31"

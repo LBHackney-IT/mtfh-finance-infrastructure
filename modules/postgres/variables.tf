@@ -75,3 +75,9 @@ variable "additional_tags" {
   type        = map(any)
   default     = {}
 }
+
+variable "existing_db_subnet_group_name" {
+  description = "Name of a pre-existing DB subnet group to attach the instance to."
+  type        = string
+  default     = null
+}
