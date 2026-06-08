@@ -106,6 +106,7 @@ module "hfs-nightly-charges" {
 
       cloudwatch_rule_schedule_expression = var.charges_cron_expression
       cloudwatch_rule_event_pattern       = null
+      is_enabled                          = var.charges_schedule_enabled
     }
   ]
 

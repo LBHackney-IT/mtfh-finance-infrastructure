@@ -31,6 +31,7 @@ variable "tasks" {
     cloudwatch_rule_event_pattern       = string
     task_cpu                            = number
     task_memory                         = number
+    is_enabled                          = optional(bool, true)
     environment_variables = list(object({
       name  = string
       value = string
