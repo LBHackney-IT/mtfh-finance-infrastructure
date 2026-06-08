@@ -1,13 +1,12 @@
 version: 2.1
 
 orbs:
-  aws-cli: circleci/aws-cli@0.1.9
-  aws_assume_role: lbh-hackit/aws_assume_role@0.1.0
+  aws_assume_role: lbh-hackit/aws_assume_role@0.1.1
 
 executors:
   docker-python:
     docker:
-      - image: circleci/python:3.7
+      - image: cimg/python:3.12
   docker-terraform:
     docker:
       - image: "hashicorp/terraform:light"
@@ -107,27 +106,8 @@ jobs:
   preview-terraform-production-changes:
     executor: docker-terraform
     steps:
-      - *attach_workspace
-      - checkout
-      - run:
-          name: get and init
-          command: |
-            cd ./production/
-            terraform get -update=true
-            terraform init
-      - run:
-          # TODO: Remove after state is fixed
-          name: fix postgres state drift
-          command: |
-            cd ./production/
-            terraform state rm module.postgres_db_production.aws_db_instance.lbh-db || true
-            terraform import module.postgres_db_production.aws_db_instance.lbh-db mtfh-finance-pgdb-db-production
-      - run:
-          # PLEASE LEAVE THIS AS A PLAN, IF YOU WANT TO CHANGE IT THEN SPEAK TO HUMAIRAA FIRST.
-          name: plan
-          command: |
-            cd ./production/
-            terraform plan
+      - terraform-init-then-plan:
+          environment: "production"
   # Infrastructure deployment:
   terraform-init-and-apply-to-development:
     executor: docker-terraform
@@ -187,36 +167,36 @@ workflows:
             - permit-development-terraform-release
   terraform-apply-staging-and-production:
     jobs:
-      # - assume-role-staging:
-      #     context: api-assume-role-housing-staging-context
-      #     filters:
-      #        branches:
-      #          only: main
-      # - preview-terraform-staging-changes:
-      #     requires:
-      #       - assume-role-staging
-      #     filters:
-      #       branches:
-      #         only: main
-      # - permit-staging-terraform-release:
-      #     type: approval
-      #     requires:
-      #       - preview-terraform-staging-changes
-      #     filters:
-      #       branches:
-      #         only: main
-      # - terraform-init-and-apply-to-staging:
-      #     requires:
-      #       - permit-staging-terraform-release
-      #     filters:
-      #       branches:
-      #         only: main
+      - assume-role-staging:
+          context: api-assume-role-housing-staging-context
+          filters:
+             branches:
+               only: main
+      - preview-terraform-staging-changes:
+          requires:
+            - assume-role-staging
+          filters:
+            branches:
+              only: main
+      - permit-staging-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-staging-changes
+          filters:
+            branches:
+              only: main
+      - terraform-init-and-apply-to-staging:
+          requires:
+            - permit-staging-terraform-release
+          filters:
+            branches:
+              only: main
       - start-production-release:
           # This approval is needed to make assume role prod trigger
           # when we actually need it, otherwise the temp creds will expire
           type: approval
-          # requires:
-          #   - terraform-init-and-apply-to-staging
+          requires:
+            - terraform-init-and-apply-to-staging
           filters:
             branches:
               only: main
