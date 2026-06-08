@@ -26,3 +26,7 @@ variable "charges_cron_expression" {
   type    = string
   default = "cron(30 0 * * ? *)"
 }
+variable "charges_schedule_enabled" {
+  type    = bool
+  default = true
+}

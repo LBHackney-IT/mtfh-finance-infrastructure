@@ -24,6 +24,7 @@ resource "aws_cloudwatch_event_rule" "ecs_task" {
 
   name                = "${each.value.task_id}-cw-event-rule"
   description         = "Runs Fargate scheduled task ${each.value.task_id}"
+  state               = each.value.is_enabled ? "ENABLED" : "DISABLED"
   schedule_expression = each.value.cloudwatch_rule_schedule_expression == null ? null : each.value.cloudwatch_rule_schedule_expression
   event_pattern       = each.value.cloudwatch_rule_event_pattern == null ? null : each.value.cloudwatch_rule_event_pattern
 }
