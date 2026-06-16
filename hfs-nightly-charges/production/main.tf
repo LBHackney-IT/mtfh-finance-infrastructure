@@ -95,11 +95,6 @@ import {
 }
 
 import {
-  to = aws_security_group_rule.inbound_traffic_to_mssql
-  id = "${data.aws_security_group.hfs_nightly_jobs_sg.id}_ingress_tcp_1433_1433_0.0.0.0/0"
-}
-
-import {
   to = aws_ecs_cluster.workers
   id = "${var.operation_name}-cluster-${var.environment}"
 }
