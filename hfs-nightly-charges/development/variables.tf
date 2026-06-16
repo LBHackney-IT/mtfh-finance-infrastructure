@@ -29,5 +29,5 @@ variable "charges_cron_expression" {
 
 variable "charges_schedule_enabled" {
   type    = bool
-  default = true
+  default = false
 }
