@@ -39,15 +39,12 @@ commands:
     parameters:
       environment:
         type: string
-      path:
-        type: string
-        default: "./<<parameters.environment>>/"
     steps:
       - *attach_workspace
       - checkout
       - run:
           command: |
-            cd <<parameters.path>>
+            cd <<parameters.environment>>
             terraform get -update=true
             terraform init
           name: get and init
@@ -55,7 +52,7 @@ commands:
       # PLEASE LEAVE THIS AS A PLAN, IF YOU WANT TO CHANGE IT THEN SPEAK TO HUMAIRAA FIRST. 
           name: plan
           command: |
-            cd <<parameters.path>>
+            cd <<parameters.environment>>
             terraform plan
   # Used for actual deployment of Terraform resources.
   terraform-init-then-apply:
@@ -63,22 +60,19 @@ commands:
     parameters:
       environment:
         type: string
-      path:
-        type: string
-        default: "./<<parameters.environment>>/"
     steps:
       - *attach_workspace
       - checkout
       - run:
           command: |
-            cd <<parameters.path>>
+            cd <<parameters.environment>>
             terraform get -update=true
             terraform init
           name: get and init
       - run:
           name: apply
           command: |
-            cd <<parameters.path>>
+            cd <<parameters.environment>>
             terraform apply -auto-approve
 
 jobs:
@@ -135,39 +129,33 @@ jobs:
     executor: docker-terraform
     steps:
       - terraform-init-then-plan:
-          environment: "development"
-          path: "./hfs-nightly-charges/development/"
+          environment: "./hfs-nightly-charges/development/"
   preview-terraform-charges-staging-changes:
     executor: docker-terraform
     steps:
       - terraform-init-then-plan:
-          environment: "staging"
-          path: "./hfs-nightly-charges/staging/"
+          environment: "./hfs-nightly-charges/staging/"
   preview-terraform-charges-production-changes:
     executor: docker-terraform
     steps:
       - terraform-init-then-plan:
-          environment: "production"
-          path: "./hfs-nightly-charges/production/"
+          environment: "./hfs-nightly-charges/production/"
   # Charges infrastructure deployment:
   terraform-init-and-apply-charges-to-development:
     executor: docker-terraform
     steps:
       - terraform-init-then-apply:
-          environment: "development"
-          path: "./hfs-nightly-charges/development/"
+          environment: "./hfs-nightly-charges/development/"
   terraform-init-and-apply-charges-to-staging:
     executor: docker-terraform
     steps:
       - terraform-init-then-apply:
-          environment: "staging"
-          path: "./hfs-nightly-charges/staging/"
+          environment: "./hfs-nightly-charges/staging/"
   terraform-init-and-apply-charges-to-production:
     executor: docker-terraform
     steps:
       - terraform-init-then-apply:
-          environment: "production"
-          path: "./hfs-nightly-charges/production/"
+          environment: "./hfs-nightly-charges/production/"
 
 workflows:
   preview-staging-and-prod-from-feature-branch:
