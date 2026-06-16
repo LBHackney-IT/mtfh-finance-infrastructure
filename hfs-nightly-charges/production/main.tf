@@ -1,4 +1,13 @@
 # Task Role IAM Policy doc
+terraform {
+  backend "s3" {
+    bucket  = "terraform-state-housing-production"
+    encrypt = true
+    region  = "eu-west-2"
+    key     = "services/mtfh-finance-infrastructure/hfs-nightly-charges/state"
+  }
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
@@ -52,24 +61,21 @@ resource "aws_security_group" "hfs_nightly_jobs" {
   description = "Allow traffic to MSSQL HFS database"
   vpc_id      = var.vpc_id
 
+  ingress {
+    description      = "Allow inbound traffic to MSSQL RDS"
+    from_port        = 1433
+    to_port          = 1433
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
-# Add a Security Group Rule for MSSQL inbound traffic
-resource "aws_security_group_rule" "inbound_traffic_to_mssql" {
-  description       = "Allow inbound traffic to MSSQL RDS"
-  security_group_id = aws_security_group.hfs_nightly_jobs.id
-  protocol          = "TCP"
-  from_port         = 1433
-  to_port           = 1433
-  type              = "ingress"
-  cidr_blocks       = ["0.0.0.0/0"]
-  ipv6_cidr_blocks  = ["::/0"]
 }
 
 # SNS topic for overnight process errors
