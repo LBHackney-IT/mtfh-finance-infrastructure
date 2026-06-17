@@ -9,7 +9,7 @@ executors:
       - image: cimg/python:3.12
   docker-terraform:
     docker:
-      - image: "hashicorp/terraform:light"
+      - image: "hashicorp/terraform:1.9.0"
 
 references:
   workspace_root: &workspace_root "~"
@@ -44,7 +44,7 @@ commands:
       - checkout
       - run:
           command: |
-            cd ./<<parameters.environment>>/
+            cd <<parameters.environment>>
             terraform get -update=true
             terraform init
           name: get and init
@@ -52,7 +52,7 @@ commands:
       # PLEASE LEAVE THIS AS A PLAN, IF YOU WANT TO CHANGE IT THEN SPEAK TO HUMAIRAA FIRST. 
           name: plan
           command: |
-            cd ./<<parameters.environment>>/
+            cd <<parameters.environment>>
             terraform plan
   # Used for actual deployment of Terraform resources.
   terraform-init-then-apply:
@@ -65,14 +65,14 @@ commands:
       - checkout
       - run:
           command: |
-            cd ./<<parameters.environment>>/
+            cd <<parameters.environment>>
             terraform get -update=true
             terraform init
           name: get and init
       - run:
           name: apply
           command: |
-            cd ./<<parameters.environment>>/
+            cd <<parameters.environment>>
             terraform apply -auto-approve
 
 jobs:
@@ -124,6 +124,38 @@ jobs:
     steps:
       - terraform-init-then-apply:
           environment: "production"
+  # Charges infrastructure preview:
+  preview-terraform-charges-development-changes:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-plan:
+          environment: "./hfs-nightly-charges/development/"
+  preview-terraform-charges-staging-changes:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-plan:
+          environment: "./hfs-nightly-charges/staging/"
+  preview-terraform-charges-production-changes:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-plan:
+          environment: "./hfs-nightly-charges/production/"
+  # Charges infrastructure deployment:
+  terraform-init-and-apply-charges-to-development:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-apply:
+          environment: "./hfs-nightly-charges/development/"
+  terraform-init-and-apply-charges-to-staging:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-apply:
+          environment: "./hfs-nightly-charges/staging/"
+  terraform-init-and-apply-charges-to-production:
+    executor: docker-terraform
+    steps:
+      - terraform-init-then-apply:
+          environment: "./hfs-nightly-charges/production/"
 
 workflows:
   preview-staging-and-prod-from-feature-branch:
@@ -223,6 +255,58 @@ workflows:
       - terraform-init-and-apply-to-production:
           requires:
             - permit-production-terraform-release
+          filters:
+            branches:
+              only: main
+
+  # Charges-specific workflows:
+  terraform-apply-charges-container:
+    jobs:
+      - assume-role-development:
+          context: api-assume-role-housing-development-context
+      - preview-terraform-charges-development-changes:
+          requires:
+              - assume-role-development
+      - permit-charges-development-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-charges-development-changes
+      - terraform-init-and-apply-charges-to-development:
+          requires:
+            - permit-charges-development-terraform-release
+      - assume-role-staging:
+          context: api-assume-role-housing-staging-context
+          filters:
+             branches:
+               only: main
+      - preview-terraform-charges-staging-changes:
+          requires:
+            - assume-role-staging
+      - permit-charges-staging-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-charges-staging-changes
+      - terraform-init-and-apply-charges-to-staging:
+          requires:
+            - permit-charges-staging-terraform-release
+      - start-charges-production-release:
+          type: approval
+          requires:
+            - terraform-init-and-apply-charges-to-staging
+      - assume-role-production:
+          context: api-assume-role-housing-production-context
+          requires:
+              - start-charges-production-release
+      - preview-terraform-charges-production-changes:
+          requires:
+            - assume-role-production
+      - permit-charges-production-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-charges-production-changes
+      - terraform-init-and-apply-charges-to-production:
+          requires:
+            - permit-charges-production-terraform-release
           filters:
             branches:
               only: main

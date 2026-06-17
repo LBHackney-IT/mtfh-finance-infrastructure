@@ -1,4 +1,15 @@
 # Task Role IAM Policy doc
+terraform {
+  backend "s3" {
+    bucket  = "terraform-state-housing-production"
+    encrypt = true
+    region  = "eu-west-2"
+    key     = "services/mtfh-finance-infrastructure/hfs-nightly-charges/state"
+  }
+}
+
+data "aws_caller_identity" "current" {}
+
 data "aws_iam_policy_document" "hfs_nightly_charges_task_role" {
 
   # Cloudwatch Logs full access
@@ -50,24 +61,21 @@ resource "aws_security_group" "hfs_nightly_jobs" {
   description = "Allow traffic to MSSQL HFS database"
   vpc_id      = var.vpc_id
 
+  ingress {
+    description      = "Allow inbound traffic to MSSQL RDS"
+    from_port        = 1433
+    to_port          = 1433
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
-
-# Add a Security Group Rule for MSSQL inbound traffic
-resource "aws_security_group_rule" "inbound_traffic_to_mssql" {
-  description       = "Allow inbound traffic to MSSQL RDS"
-  security_group_id = aws_security_group.hfs_nightly_jobs.id
-  protocol          = "TCP"
-  from_port         = 1433
-  to_port           = 1433
-  type              = "ingress"
-  cidr_blocks       = ["0.0.0.0/0"]
-  ipv6_cidr_blocks  = ["::/0"]
 }
 
 # SNS topic for overnight process errors
@@ -77,7 +85,49 @@ resource "aws_sns_topic" "housing_finance_alarms" {
 
 import {
   to = aws_sns_topic.housing_finance_alarms
-  id = "arn:aws:sns:eu-west-2:282997303675:housing-finance-alarms"
+  id = "arn:aws:sns:eu-west-2:${data.aws_caller_identity.current.account_id}:housing-finance-alarms"
+}
+
+data "aws_security_group" "hfs_nightly_jobs_sg" {
+  filter {
+    name   = "group-name"
+    values = ["${var.operation_name}-sg-${var.environment}"]
+  }
+}
+
+import {
+  to = aws_security_group.hfs_nightly_jobs
+  id = data.aws_security_group.hfs_nightly_jobs_sg.id
+}
+
+import {
+  to = aws_ecs_cluster.workers
+  id = "${var.operation_name}-cluster-${var.environment}"
+}
+
+import {
+  to = module.hfs-nightly-charges.aws_iam_role.fargate
+  id = "${var.operation_name}-fargate"
+}
+
+import {
+  to = module.hfs-nightly-charges.aws_iam_role.task_role
+  id = "${var.operation_name}-task-role"
+}
+
+import {
+  to = module.hfs-nightly-charges.aws_iam_role.cloudwatch_run_ecs_events
+  id = "${var.operation_name}-cloudwatch-role"
+}
+
+import {
+  to = module.hfs-nightly-charges.aws_ecr_repository.worker
+  id = var.operation_name
+}
+
+import {
+  to = module.hfs-nightly-charges.aws_cloudwatch_log_group.ecs_task_logs
+  id = "${var.operation_name}-ecs-task-logs"
 }
 
 # Using the Fargate Task module
