@@ -89,6 +89,11 @@ commands:
             terraform init
           name: get and init
       - run:
+          name: release stale state lock
+          command: |
+            cd <<parameters.environment>>
+            terraform force-unlock -force 94a47c9d-3126-ef87-dd28-2f2fa7227a32 || true
+      - run:
           name: plan destroy
           command: |
             cd <<parameters.environment>>
@@ -107,6 +112,11 @@ commands:
             terraform get -update=true
             terraform init
           name: get and init
+      - run:
+          name: release stale state lock
+          command: |
+            cd <<parameters.environment>>
+            terraform force-unlock -force 94a47c9d-3126-ef87-dd28-2f2fa7227a32 || true
       - run:
           name: destroy
           no_output_timeout: 45m
