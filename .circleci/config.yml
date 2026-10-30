@@ -74,55 +74,6 @@ commands:
           command: |
             cd <<parameters.environment>>
             terraform apply -auto-approve
-  terraform-init-then-plan-destroy:
-    description: "Initializes terraform and plans destruction of managed resources"
-    parameters:
-      environment:
-        type: string
-    steps:
-      - *attach_workspace
-      - checkout
-      - run:
-          command: |
-            cd <<parameters.environment>>
-            terraform get -update=true
-            terraform init
-          name: get and init
-      - run:
-          name: release stale state lock
-          command: |
-            cd <<parameters.environment>>
-            terraform force-unlock -force 94a47c9d-3126-ef87-dd28-2f2fa7227a32 || true
-      - run:
-          name: plan destroy
-          command: |
-            cd <<parameters.environment>>
-            terraform plan -destroy
-  terraform-init-then-destroy:
-    description: "Initializes terraform and destroys managed resources"
-    parameters:
-      environment:
-        type: string
-    steps:
-      - *attach_workspace
-      - checkout
-      - run:
-          command: |
-            cd <<parameters.environment>>
-            terraform get -update=true
-            terraform init
-          name: get and init
-      - run:
-          name: release stale state lock
-          command: |
-            cd <<parameters.environment>>
-            terraform force-unlock -force 94a47c9d-3126-ef87-dd28-2f2fa7227a32 || true
-      - run:
-          name: destroy
-          no_output_timeout: 45m
-          command: |
-            cd <<parameters.environment>>
-            terraform destroy -auto-approve
 
 jobs:
   # Auth:
@@ -205,32 +156,9 @@ jobs:
     steps:
       - terraform-init-then-apply:
           environment: "./hfs-nightly-charges/production/"
-  assume-role-pre-production:
-    executor: docker-python
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_PRE_PRODUCTION
-  assume-role-pre-production-for-destroy:
-    executor: docker-python
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_PRE_PRODUCTION
-  preview-terraform-pre-production-destroy:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-plan-destroy:
-          environment: "pre-production"
-  terraform-destroy-pre-production:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-destroy:
-          environment: "pre-production"
 
 workflows:
   preview-staging-and-prod-from-feature-branch:
-    when:
-      not:
-        equal: [ "feat/ssi-1369-teardown-pre-production", << pipeline.git.branch >> ]
     jobs:
       - assume-role-staging:
           context: api-assume-role-housing-staging-context
@@ -256,9 +184,6 @@ workflows:
               ignore: main
       
   terraform-apply-development:
-    when:
-      not:
-        equal: [ "feat/ssi-1369-teardown-pre-production", << pipeline.git.branch >> ]
     jobs:
       - assume-role-development:
           context: api-assume-role-housing-development-context
@@ -273,9 +198,6 @@ workflows:
           requires:
             - permit-development-terraform-release
   terraform-apply-staging-and-production:
-    when:
-      not:
-        equal: [ "feat/ssi-1369-teardown-pre-production", << pipeline.git.branch >> ]
     jobs:
       - assume-role-staging:
           context: api-assume-role-housing-staging-context
@@ -339,9 +261,6 @@ workflows:
 
   # Charges-specific workflows:
   terraform-apply-charges-container:
-    when:
-      not:
-        equal: [ "feat/ssi-1369-teardown-pre-production", << pipeline.git.branch >> ]
     jobs:
       - assume-role-development:
           context: api-assume-role-housing-development-context
@@ -391,38 +310,3 @@ workflows:
           filters:
             branches:
               only: main
-
-  teardown-pre-production:
-    jobs:
-      - assume-role-pre-production:
-          context: api-assume-role-housing-pre-production-context
-          filters:
-            branches:
-              only: feat/ssi-1369-teardown-pre-production
-      - preview-terraform-pre-production-destroy:
-          requires:
-            - assume-role-pre-production
-          filters:
-            branches:
-              only: feat/ssi-1369-teardown-pre-production
-      - permit-pre-production-terraform-destroy:
-          type: approval
-          requires:
-            - preview-terraform-pre-production-destroy
-          filters:
-            branches:
-              only: feat/ssi-1369-teardown-pre-production
-      # Assume the role again after approval so temporary credentials have not expired
-      - assume-role-pre-production-for-destroy:
-          context: api-assume-role-housing-pre-production-context
-          requires:
-            - permit-pre-production-terraform-destroy
-          filters:
-            branches:
-              only: feat/ssi-1369-teardown-pre-production
-      - terraform-destroy-pre-production:
-          requires:
-            - assume-role-pre-production-for-destroy
-          filters:
-            branches:
-              only: feat/ssi-1369-teardown-pre-production
