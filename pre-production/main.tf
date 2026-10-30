@@ -12,19 +12,6 @@ terraform {
   }
 }
 
-data "aws_ssm_parameter" "housing_finance_postgres_database" {
-  name = "/housing-finance/pre-production/postgres-database"
-}
-data "aws_ssm_parameter" "housing_finance_postgres_port" {
-  name = "/housing-finance/pre-production/postgres-port"
-}
-data "aws_ssm_parameter" "housing_finance_postgres_username" {
-  name = "/housing-finance/pre-production/postgres-username"
-}
-data "aws_ssm_parameter" "housing_finance_postgres_password" {
-  name = "/housing-finance/pre-production/postgres-password"
-}
-
 resource "aws_security_group" "mtfh_finance_security_group" {
   name        = "mtfh-finance-allow-traffic-${var.environment_name}"
   description = "Allow traffic for the various databases and applications"
